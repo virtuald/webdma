@@ -70,7 +70,8 @@ you will need to use that directory instead):
 cd "\Program Files\boost\boost_1_38_0"
 }}}
 
-Now, do a dry run of the patch. Type the following:
+Now, do a dry run of the patch (the patch is located in the boost directory of
+the WebDMA distribution). Type the following:
 
 {{{
 patch --dry-run -p1 < path\to\patchfile\boost_1_38_vxworks.patch
