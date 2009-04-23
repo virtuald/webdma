@@ -12,11 +12,11 @@ C++ programming guide that comes with the Wind River environment.
 
 = Installing/patching Boost =
 
-== Installing GNU Patch ==
-
-The boost header files need to be patched to work with vxWorks. You do not 
+The current (1.38.0) boost header files need to be patched to work with vxWorks. You do not 
 need to use GNU Patch to do the patching, but the instructions contained 
 here use it. There are a number of programs that can handle patch files. 
+
+== Installing GNU Patch ==
 
 Download the complete package without sources from the GNUWin32 website, at
 [http://gnuwin32.sourceforge.net/packages/patch.htm]
