@@ -1,0 +1,24 @@
+This is a list of things I want to do with this, I just haven't gotten
+around to doing it. Patches are certainly welcome.
+
+	- Bundling WebDMA as a library
+	
+	- It would be really nice to have the adjustment bars
+	
+	- It could be interesting to support custom types as proxies, but
+	thats probably too annoying. 
+	
+	- Theres a ton of potential here for data aquisition, its just a matter
+	of implementing it. 
+	
+	- Flot (javascript graphing library) is included, but it isn't
+	used at all yet. Need to improve the data aquisition stuff so we
+	can use that. 
+	 
+	- The HTTP API needs to be documented, and expanded so that multiple
+	variables can be modified at once (among other things). Currently, 
+	its designed for a user to interact with it, so theres no need 
+	for being able to vary more than one thing at once. However, theres 
+	a lot of neat control applications that could be written with a better 
+	API available. 
+	
