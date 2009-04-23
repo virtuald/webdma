@@ -3,8 +3,12 @@
   * *Q:* What does WebDMA stand for?
   
    A: _Web-based Direct Memory Access_  Yes, I realize that technically its not 'direct', and that the usage of DMA is a bit different than the traditional computer definition of DMA. However, its close enough for my purposes. :) 
+
+  * *Q:* Whats the story behind this?
   
-  * *Q:* You can control a robot with a webpage? You're pulling my leg!
+  A: When walking around during the Boston Regional, I had been talking to some people about code, and they mentioned that LabView was great because they could tune their PID controllers on the fly while the robot was operating. So I thought to myself, “why can’t I do this with C++?”. And… so I did. WebDMA was created to allow our FIRST Robotics team to tune our robot in an easy to use and intuitive way via any modern web browser. And since I used the Boost Asio portable networking library, you can use it for any C++ program also.
+  
+  * *Q:* So that means you can control a robot with a webpage? You're pulling my leg!
   
    A: Actually, I'm not. It works just fine, download the code and see. I'm hoping to put up a video on YouTube in the near future, its pretty sweet. 
 
