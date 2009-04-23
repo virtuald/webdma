@@ -1,0 +1,13 @@
+#summary Frequently asked questions
+
+  * *Q:* What does WebDMA stand for?
+  
+   A: _Web-based Direct Memory Access_  Yes, I realize that technically its not 'direct', and that the usage of DMA is a bit different than the traditional computer definition of DMA. However, its close enough for my purposes. :) 
+  
+  * *Q:* You can control a robot with a webpage? You're pulling my leg!
+  
+   A: Actually, I'm not. It works just fine, download the code and see. I'm hoping to put up a video on YouTube in the near future, its pretty sweet. 
+
+  * *Q:* What operating systems are supported?
+  
+  A: Any operating system that you can run a C++ compiler supported by Boost, and also on the NI-cRIO/vxWorks used in the 2009 FIRST Robotics controller
