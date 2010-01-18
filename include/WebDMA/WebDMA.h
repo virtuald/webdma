@@ -40,7 +40,8 @@ public:
 	/// proxies after this is called.
 	static void Enable(const std::string &port = "", const std::string &rootdir = "");
 
-	
+	/// Forces an unload of the webserver
+	static void Unload();	
 
 	/** 
 		Use this to initialize an integer proxy
