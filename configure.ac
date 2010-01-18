@@ -5,7 +5,7 @@ AC_INIT([webface], [1.0.0])
 AC_PREREQ([2.63])
 AC_CONFIG_SRCDIR([main.cpp])
 AC_CONFIG_HEADERS([config.h])
-AC_REVISION($Revision: 1.4 $)
+AC_REVISION($Revision$)
 
 AM_INIT_AUTOMAKE
 
