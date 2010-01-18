@@ -182,7 +182,15 @@
 				Name="WebDMA"
 				>
 				<File
+					RelativePath=".\WebDMA\VariableProxy.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\WebDMA\WebDMA.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WebDMA\WebDMA_Pimpl.cpp"
 					>
 				</File>
 				<Filter

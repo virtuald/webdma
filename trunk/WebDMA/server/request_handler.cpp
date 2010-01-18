@@ -20,7 +20,7 @@
 #include "reply.hpp"
 #include "request.hpp"
 
-#include "../WebDMA.h"
+#include "../WebDMA_Pimpl.h"
 
 namespace http {
 namespace server {
@@ -123,7 +123,7 @@ void request_handler::handle_get_request(const std::string &request_path, reply 
 	if (request_path == "/index.html")
 	{
 		// substitute the inner html element with our custom one
-		boost::replace_first(rep.content, "<!-- variables fill in here -->", WebDMA::GetInstance()->get_html());
+		boost::replace_first(rep.content, "<!-- variables fill in here -->", WebDMA_Pimpl::GetInstance()->get_html());
 	}
 }
 
@@ -140,7 +140,7 @@ void request_handler::handle_post_request(const std::string &request_path, const
 	// setup a 200 OK message
 	rep = reply::stock_reply(reply::ok, true);
 	
-	rep.content = WebDMA::GetInstance()->ProcessRequest(post_data);
+	rep.content = WebDMA_Pimpl::GetInstance()->ProcessRequest(post_data);
 }
 
 

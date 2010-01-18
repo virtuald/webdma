@@ -12,6 +12,7 @@ webface_SOURCES = \
 	main.cpp \
 	WebDMA/DataProxyInfo.h \
 	WebDMA/StaticDeleter.h \
+	WebDMA/VariableProxy.cpp \
 	WebDMA/VariableProxy.h \
 	WebDMA/VariableProxyFlags.h \
 	WebDMA/WebInterface.cpp \
