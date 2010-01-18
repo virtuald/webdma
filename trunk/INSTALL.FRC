@@ -130,9 +130,15 @@ Doing the actual build
 Launch the Wind River Environment, and open the workspace that your
 project resides in (this should be done by default). 
 
-Select "Import Project", and import the project out of the src
-directory. Once this is done, then build the project and you should
-end up with a WebDMA.out file. 
+Right click on the Project Explorer, and select "Import Project". Select
+General -> Existing Projects into Workspace, and select the WebDMA src/
+directory as the "root directory" of the project. 
+
+Next, copy the files in include/WebDMA to the following directory: 
+	
+	C:\windriver\vxworks-6.3\target\h\WebDMA
+	
+After that, you should just be able to build and it should just work. 
 
 
 Installing onto the robot
