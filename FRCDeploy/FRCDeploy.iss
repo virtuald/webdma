@@ -7,7 +7,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{55BFAD25-4C79-4365-9271-A18FEF6516E1}
 AppName=WebDMA
-AppVerName=WebDMA 0.1
+AppVerName=WebDMA 0.2
 AppPublisher=Dustin Spicuzza
 AppPublisherURL=http://code.google.com/p/webdma/
 AppSupportURL=http://code.google.com/p/webdma/
@@ -29,15 +29,15 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "FRCDeploy.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 ; WebDMA object file installation
-Source: "C:\WindRiver\workspace\WebDMA\WebDMA.out"
+Source: "..\src\PPC603gnu\WebDMA\Debug\WebDMA.out"; DestDir: "{app}"; Flags: ignoreversion
 
 ; WWW files installation
-Source: "..\www\*"; DestDir: "{app}\www"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\www\*"; DestDir: "{app}\www"; Flags: ignoreversion createallsubdirs recursesubdirs 
 
 ; Header files installation
-Source: "..\WebDMA\WebDMA.h"; DestDir: "{wrDir}\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion createallsubdirs
-Source: "..\WebDMA\VariableProxy.h"; DestDir: "{wrDir}\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion createallsubdirs
-Source: "..\WebDMA\VariableProxyFlags.h"; DestDir: "{wrDir}\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion createallsubdirs
+Source: "..\include\WebDMA\WebDMA.h"; DestDir: "C:\WindRiver\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion
+Source: "..\include\WebDMA\VariableProxy.h"; DestDir: "C:\WindRiver\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion
+Source: "..\include\WebDMA\VariableProxyFlags.h"; DestDir: "C:\WindRiver\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion
 
 
 [Icons]
