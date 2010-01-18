@@ -1,9 +1,10 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([webface], [1.0.0])
+AC_INIT([WebDMA], [0.2])
 AC_PREREQ([2.63])
-AC_CONFIG_SRCDIR([main.cpp])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_SRCDIR([demo/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_REVISION($Revision$)
 
@@ -25,20 +26,10 @@ AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug],[enable verbose debugging o
 AC_ARG_ENABLE(shadow, AS_HELP_STRING([--disable-shadow],[disable warnings for shadowed variables]),[], [enable_shadow=yes])
 AC_ARG_ENABLE(checks, AS_HELP_STRING([--enable-checks], [enables strict glibc runtime checks (useful for STL debugging, but big performance hit)]))
 
-AC_ARG_ENABLE(efence, AS_HELP_STRING([--enable-efence],[enable electric fence malloc debugger, useful for finding random segfaults (automatically adds --enable-debug)]))
-
 AC_ARG_ENABLE(productionbuild, AS_HELP_STRING([--enable-productionbuild],[enable production build flags (no asserts, optimizations on)]))
 
 
-if test x$enable_debug = xyes || test x$enable_efence = xyes; then
-
-	# enable electric fence if asked to
-	if test x$enable_efence = xyes; then
-		AC_CHECK_LIB([efence],[malloc],[],[
-			echo "Error: electric fence malloc debugger was not found"
-			exit -1;
-		])
-	fi
+if test x$enable_debug = xyes; then
 
 	# override the global CFLAGS/CXXFLAGS, we're debugging and don't need any O flags
 	CFLAGS="-DDEBUG -g -ggdb"
@@ -71,6 +62,10 @@ if test x$enable_shadow = xyes; then
 	CXXFLAGS="${CXXFLAGS-} -Wshadow"
 fi
 
+# setup library path
+WebDMAincludedir="\$(includedir)/WebDMA"
+AC_SUBST(WebDMAincludedir)
+
 
 # Checks for libraries.
 
@@ -86,6 +81,10 @@ AC_CHECK_FUNCS([socket])
 
 AC_CONFIG_FILES([
 	Makefile
+	include/Makefile
+	include/WebDMA/Makefile
+	src/Makefile
+	demo/Makefile
 ])
 
 AC_OUTPUT

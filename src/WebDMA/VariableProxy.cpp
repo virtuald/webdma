@@ -20,7 +20,7 @@
 
 
 
-#include "VariableProxy.h"
+#include <WebDMA/VariableProxy.h>
 
 #include <boost/thread/shared_mutex.hpp>
 #include <boost/thread/locks.hpp>

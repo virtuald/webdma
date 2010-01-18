@@ -19,7 +19,7 @@
 
 
 #include "WebDMA_Pimpl.h"
-#include "VariableProxy.h"
+#include <WebDMA/VariableProxy.h>
 
 #include "server/server.hpp"
 

@@ -26,8 +26,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/thread/shared_mutex.hpp>
 
-#include "VariableProxyFlags.h"
-#include "VariableProxy.h"
+#include <WebDMA/VariableProxyFlags.h>
+#include <WebDMA/VariableProxy.h>
 
 
 // base type

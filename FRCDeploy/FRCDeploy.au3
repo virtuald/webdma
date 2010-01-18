@@ -1,10 +1,26 @@
 #cs ----------------------------------------------------------------------------
 
- AutoIt Version: 3.3.4.0
- Author:         myName
+    WebDMA
+    Copyright (C) 2009-2010 Dustin Spicuzza <dustin@virtualroadside.com>
+    
+    $Id$
 
- Script Function:
-	Template AutoIt script.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License v3 as published by
+    the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    
+    This is an automated installer script to deploy WebDMA onto a FRC Robot
+    system. Compile this with AutoIt
+ 
 
 #ce ----------------------------------------------------------------------------
 

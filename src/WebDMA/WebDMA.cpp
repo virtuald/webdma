@@ -18,7 +18,7 @@
 */
 
 
-#include "WebDMA.h"
+#include <WebDMA/WebDMA.h>
 #include "WebDMA_Pimpl.h"
 
 
