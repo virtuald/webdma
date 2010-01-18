@@ -1,5 +1,5 @@
     WebDMA
-    Copyright (C) 2009 Dustin Spicuzza <dustin@virtualroadside.com>
+    Copyright (C) 2009-2010 Dustin Spicuzza <dustin@virtualroadside.com>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License v3 as published by
@@ -65,8 +65,8 @@ usable on any platform supported by these Boost libraries (tested on
 Boost 1.38, requires a patch for vxWorks). 
 
 
-Build Requirements
-------------------
+Build Requirements/Instructions
+-------------------------------
 
 All platforms must have the Boost header-only libraries installed. In
 addition, the Boost Thread and Boost System libraries must be installed.
@@ -76,6 +76,11 @@ probably work with WebDMA just fine.
 
 
 FIRST Robotics (Wind River vxWorks):
+		
+	If you just want to use WebDMA, I recommend just using the WebDMA
+	FRC binary installer (available on the WebDMA download site). 
+	This will setup your environment properly for WebDMA, and doesn't 
+	require installation of boost header files. 
 
 	- You need the FRC Wind River 3.0 development environment, and your
 	robot must be flashed with the C++ cRio image
@@ -87,6 +92,8 @@ FIRST Robotics (Wind River vxWorks):
 
 	- A program that can apply patches. I would recommend GNU patch, see
 	http://gnuwin32.sourceforge.net/packages/patch.htm
+
+	
 	
 Windows:
 
@@ -99,36 +106,44 @@ Windows:
 		#define BOOST_DATE_TIME_NO_LIB
 		#define BOOST_REGEX_NO_LIB
 		
+	- Open WebDMA.sln to build the WebDMA library and the associated demo
+	application
+		
 Other platforms:
 
-	- There is a sample set of GNU autotools-based build files included for
-	*nix platforms, but these just build an application and not a library.
+	- The autotools build files create a library you can link to using 
+	libtool. 
 	
-Why isn't this distributed with library build files?
-----------------------------------------------------
+	./configure
+	make
+	make install
 
-It will be in the future, probably. 
-
-I just haven't gotten around to setting up the configuration for that. 
-If there is sufficient demand for that, then I suppose at some point 
-that will be done. 
 
 How to use
 ----------
 
-See main.cpp for an example application that creates a bunch of proxy objects
+Quick start:
+
+- Add #include <WebDMA/WebDMA.h> to your source file.
+- Create a bunch of proxy objects (see WebDMA.h for the appropriate functions)
+- Call WebDMA::Enable( [port], [webserver root dir]);
+
+See demo/main.cpp for an example application that creates a bunch of proxy objects
 and launches a webserver that you can access by going to http://localhost:8080
 in your favorite web browser. 
 
 The webserver defaults to port 8080, but you can select the port when you call
 the WebDMA::Enable() function. 
 
+
 Web Interface
 -------------
 
 Something that is rather important to keep in mind is that however you use
 the application, it requires a directory of files that make up the web 
-interface, as these files are *not* 
+interface, as these files are currently *not* internal to the library. An
+advantage of this is that you can modify the interface to be whatever you 
+want it to look like. 
 
 
 Comments/Bugs?

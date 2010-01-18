@@ -17,7 +17,7 @@ do
 
 	if test -f $dir/Makefile.am
 	then
-		aclocal=" && aclocal -I ."
+		aclocal=" && aclocal -I build-aux"
 		automake=" && automake --copy --add-missing"
 
 		if egrep 'A[CM]_PROG_LIBTOOL' $dir/configure.ac >/dev/null

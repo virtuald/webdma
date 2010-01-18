@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "WebDMA/WebDMA.h"
+#include <WebDMA/WebDMA.h>
 
 #ifdef _MSC_VER
 	#include <windows.h>
@@ -39,7 +39,7 @@ int main()
 	IntProxy count = WebDMA::CreateIntProxy("Controls", "counter", 
 					IntProxyFlags().default_value(0).readonly() );
 	
-	WebDMA::Enable("8080");
+	WebDMA::Enable("8080", "../www");
 	
 	while (stayOn)
 	{
