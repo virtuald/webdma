@@ -76,6 +76,14 @@ WebDMA_Pimpl::~WebDMA_Pimpl()
 	}
 }
 
+void WebDMA_Pimpl::Unload()
+{
+	if (m_instance != NULL)
+	{
+		delete m_instance;
+		m_instance = NULL;
+	}
+}
 
 /// this is the thread that the HTTP server runs on. When the WebDMA_Pimpl singleton
 /// instance is destroyed, the server should be signaled to exit and the 

@@ -76,6 +76,8 @@ public:
 		
 	// internal functions that start the webserver thread
 	void Enable(const std::string &port, const std::string &rootdir);
+
+	static void Unload();
 	
 	~WebDMA_Pimpl();
 

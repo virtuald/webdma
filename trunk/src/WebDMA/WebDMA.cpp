@@ -32,7 +32,10 @@ void WebDMA::Enable(const std::string &port, const std::string &rootdir)
 	WebDMA_Pimpl::GetInstance()->Enable(port, rootdir);
 }
 
-
+void WebDMA::Unload()
+{
+	WebDMA_Pimpl::Unload();
+}
 
 /*** proxy creation routines ***/
 
