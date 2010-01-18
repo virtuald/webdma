@@ -1,6 +1,6 @@
 /*
     WebDMA
-    Copyright (C) 2009 Dustin Spicuzza <dustin@virtualroadside.com>
+    Copyright (C) 2009-2010 Dustin Spicuzza <dustin@virtualroadside.com>
 	
 	$Id$
 
@@ -20,14 +20,25 @@
 #ifndef WI_VARIABLEPROXY_H
 #define WI_VARIABLEPROXY_H
 
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/locks.hpp>
+namespace boost {
+	class shared_mutex;
+};
 
 
-/**
-	\class VariableProxyImpl
+/* 
+	Each proxy provides the following operations:
 
-	This type allows you to use it in read-only operations exactly like
+	Get Operations:
+	- Implicit conversion to the proxied type
+	- Explicit retrieval of the proxied value (via Get())
+
+	Set Operations:
+	- Assignment of the proxied type to the proxy (via operator=)
+	- Explicit setting of the proxied value (via Set())
+
+	Some notes:
+
+	The proxy types allows you to use it in read-only operations exactly like
 	you would use the native type. The underlying data is in some 
 	configuration database or some such thing. Its like a smart pointer,
 	but a bit different.
@@ -46,71 +57,38 @@
 	
 	@todo If we could use atomic operations, then we wouldn't need to do any
 	locking and this could be quite fast
+
 */
-template <typename T>
-struct VariableProxyImpl {
 
-	typedef boost::shared_mutex mutex_type;
-	typedef boost::shared_lock< mutex_type > read_lock;
-	typedef boost::unique_lock< mutex_type > write_lock;
 
-	/// default/null constructor
-	VariableProxyImpl() :
-		m_proxied_value(NULL), m_mutex(NULL)
-	{}
-	
-	/// initialization constructor
-	VariableProxyImpl(T * proxied_value, mutex_type * mutex) :
-		m_proxied_value(proxied_value), m_mutex(mutex)
-	{}
-
-	/// converts to the given type automatically
-	operator T() const
-	{
-		read_lock lock(*m_mutex);
-		return *m_proxied_value; 
-	}
-	
-	/// a more explicit way of obtaining the value
-	T Get() const
-	{
-		read_lock lock(*m_mutex);
-		return *m_proxied_value; 
-	}
-	
-	
-	/// changes the variable
-	VariableProxyImpl<T>& operator=(const T& value)
-	{
-		write_lock lock(*m_mutex);
-		*m_proxied_value = value;
-		return *this;
-	}
-
-	/// a more explicit way of setting the value
-	void Set(const T& value)
-	{
-		write_lock lock(*m_mutex);
-		*m_proxied_value = value;
-	}
-
-private:
-	T * 					m_proxied_value;
-	mutable mutex_type *	m_mutex;
-
+#define IMPLEMENT_PROXY( implname, T ) 						\
+															\
+struct implname {											\
+															\
+	typedef boost::shared_mutex mutex_type;					\
+															\
+	implname();												\
+	implname(T * proxied_value, mutex_type * mutex);		\
+	operator T() const;										\
+	T Get() const;											\
+	implname& operator=(const T& value);					\
+	void Set(const T& value);								\
+															\
+private:													\
+	T * 					m_proxied_value;				\
+	mutable mutex_type *	m_mutex;						\
 };
 
-/// definition of integer proxy
-typedef VariableProxyImpl<int>		IntProxy;
+/* 
+	Defined proxy types
+*/
 
-/// definition of floating point proxy
-typedef VariableProxyImpl<float>	FloatProxy;
+IMPLEMENT_PROXY( IntProxy, int )
+IMPLEMENT_PROXY( FloatProxy, float )
+IMPLEMENT_PROXY( DoubleProxy, double )
+IMPLEMENT_PROXY( BoolProxy, bool )
 
-/// definition of double floating point proxy
-typedef VariableProxyImpl<double>	DoubleProxy;
-
-/// definition of boolean proxy
-typedef VariableProxyImpl<bool>		BoolProxy;
+#undef IMPLEMENT
 
 
 #endif

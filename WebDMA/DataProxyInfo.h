@@ -1,6 +1,6 @@
 /*
     WebDMA
-    Copyright (C) 2009 Dustin Spicuzza <dustin@virtualroadside.com>
+    Copyright (C) 2009-2010 Dustin Spicuzza <dustin@virtualroadside.com>
 	
 	$Id$
 
@@ -24,7 +24,7 @@
 #include <sstream>
 
 #include <boost/lexical_cast.hpp>
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/shared_mutex.hpp>
 
 #include "VariableProxyFlags.h"
 #include "VariableProxy.h"
@@ -44,15 +44,14 @@ struct DataProxyInfo {
 
 
 // numeric implementation
-template <typename T>
+template <typename T, typename Proxy>
 struct NumericProxyInfoImpl : public DataProxyInfo {
 
 	typedef NumericProxyFlagsImpl<T>	Flags;
-	typedef VariableProxyImpl<T>		Proxy;
 
 	typedef typename Proxy::mutex_type	mutex_type;
-	typedef typename Proxy::read_lock	read_lock;
-	typedef typename Proxy::write_lock	write_lock;
+	typedef typename boost::shared_lock<mutex_type>	read_lock;
+	typedef typename boost::unique_lock<mutex_type> write_lock;
 
 	/// constructor
 	NumericProxyInfoImpl(const Flags& flags) :
@@ -188,24 +187,24 @@ private:
 };
 
 /// implementation for floats
-typedef NumericProxyInfoImpl<float> FloatProxyInfo;
+typedef NumericProxyInfoImpl<float, FloatProxy>		FloatProxyInfo;
 
 /// implementation for doubles
-typedef NumericProxyInfoImpl<double> DoubleProxyInfo;
+typedef NumericProxyInfoImpl<double, DoubleProxy>	DoubleProxyInfo;
 
 /// implementation for integers
-typedef NumericProxyInfoImpl<int> 	IntProxyInfo;
+typedef NumericProxyInfoImpl<int, IntProxy> 		IntProxyInfo;
 
 
 
 // boolean implementation
 struct BoolProxyInfo : public DataProxyInfo {
 
-	typedef VariableProxyImpl<bool>		Proxy;
+	typedef BoolProxy					Proxy;
 
 	typedef Proxy::mutex_type			mutex_type;
-	typedef Proxy::read_lock			read_lock;
-	typedef Proxy::write_lock			write_lock;
+	typedef boost::shared_lock<mutex_type>	read_lock;
+	typedef boost::unique_lock<mutex_type> write_lock;
 
 	/// constructor
 	BoolProxyInfo(bool default_value) :
