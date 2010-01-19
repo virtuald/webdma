@@ -25,6 +25,8 @@
 #include "VariableProxy.h"
 #include "VariableProxyFlags.h"
 
+class WebDMA_Pimpl;
+
 
 /**
 	\class WebDMA
@@ -36,12 +38,14 @@
 class WebDMA {
 public:
 
-	/// you should call this to start the web server. You may add more
-	/// proxies after this is called.
-	static void Enable(const std::string &port = "", const std::string &rootdir = "");
+	WebDMA();
+	~WebDMA();
 
-	/// Forces an unload of the webserver
-	static void Unload();	
+	/**
+		You should call this to start the web server. You may add more
+		proxies after this is called.
+	*/
+	void Enable(const std::string &port = "", const std::string &rootdir = "");
 
 	/** 
 		Use this to initialize an integer proxy
@@ -51,7 +55,7 @@ public:
 		@param flags		Use this to set min/max/default values and etc. For example,
 							IntProxyFlags().default_value(x).minval(x).maxval(x).step(x)
 	*/
-	static IntProxy CreateIntProxy( const char * groupName, const char * name, const IntProxyFlags &flags);
+	IntProxy CreateIntProxy( const char * groupName, const char * name, const IntProxyFlags &flags);
 	
 
 	/** 
@@ -62,7 +66,7 @@ public:
 		@param flags		Use this to set min/max/default values and etc. For example,
 							FloatProxyFlags().default_value(x).minval(x).maxval(x).step(x).precision(2)
 	*/
-	static FloatProxy CreateFloatProxy( const char * groupName, const char * name, const FloatProxyFlags &flags);
+	FloatProxy CreateFloatProxy( const char * groupName, const char * name, const FloatProxyFlags &flags);
 	
 	/** 
 		Use this to initialize a 'double' floating point proxy
@@ -72,7 +76,7 @@ public:
 		@param flags		Use this to set min/max/default values and etc. For example,
 							DoubleProxyFlags().default_value(x).minval(x).maxval(x).step(x).precision(2)
 	*/
-	static DoubleProxy CreateDoubleProxy( const char * groupName, const char * name, const DoubleProxyFlags &flags);
+	DoubleProxy CreateDoubleProxy( const char * groupName, const char * name, const DoubleProxyFlags &flags);
 	
 	
 	/**
@@ -82,14 +86,34 @@ public:
 		@param name				name of this variable (should be unique)
 		@param default_value 	the starting value of this proxy
 	*/
-	static BoolProxy CreateBoolProxy( const char * groupName, const char * name, bool default_value);
+	BoolProxy CreateBoolProxy( const char * groupName, const char * name, bool default_value);
 	
 
 	/// @todo other types of variables: enums, doubles, signed/unsigned.. 
 	
 private:
+	
+	// no copying/assigning
+	WebDMA(const WebDMA&);
+	WebDMA& operator=(const WebDMA&);
 
-	WebDMA();
+	WebDMA_Pimpl * m_pimpl;
 };
+
+/*
+	This is here for convenience for quick debugging, so you 
+	don't have to keep passing a WebDMA instance around.
+	
+	HOWEVER: If you are implementing tuning, then you should
+	probably pass a WebDMA instance around. This is only really
+	intended for debugging use. 
+*/
+#ifdef WEBDMA_WEBDMA_CPP
+	WebDMA * webdma_instance;
+#else
+	extern WebDMA * webdma_instance;
+#endif
+
+
 
 #endif

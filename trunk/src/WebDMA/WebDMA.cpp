@@ -17,24 +17,30 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#define WEBDMA_WEBDMA_CPP
 
 #include <WebDMA/WebDMA.h>
 #include "WebDMA_Pimpl.h"
 
 
 // default constructor -- private, never created
-WebDMA::WebDMA() 
-{}
+WebDMA::WebDMA() :
+	m_pimpl( new WebDMA_Pimpl() )
+{
+	webdma_instance = this;
+}
+
+
+WebDMA::~WebDMA()
+{
+	delete m_pimpl;
+	m_pimpl = NULL;
+}
 
 
 void WebDMA::Enable(const std::string &port, const std::string &rootdir)
 {
-	WebDMA_Pimpl::GetInstance()->Enable(port, rootdir);
-}
-
-void WebDMA::Unload()
-{
-	WebDMA_Pimpl::Unload();
+	m_pimpl->Enable(port, rootdir);
 }
 
 /*** proxy creation routines ***/
@@ -46,7 +52,7 @@ IntProxy WebDMA::CreateIntProxy(
 	const IntProxyFlags &flags)
 {
 	IntProxyInfo * proxy = new IntProxyInfo(flags);
-	WebDMA_Pimpl::GetInstance()->InitProxy( proxy, groupName, name );
+	m_pimpl->InitProxy( proxy, groupName, name );
 	return proxy->GetProxy();
 }
 	
@@ -56,7 +62,7 @@ FloatProxy WebDMA::CreateFloatProxy(
 	const FloatProxyFlags &flags)
 {
 	FloatProxyInfo * proxy = new FloatProxyInfo(flags);
-	WebDMA_Pimpl::GetInstance()->InitProxy( proxy, groupName, name );
+	m_pimpl->InitProxy( proxy, groupName, name );
 	return proxy->GetProxy();
 }
 
@@ -66,7 +72,7 @@ DoubleProxy WebDMA::CreateDoubleProxy(
 	const DoubleProxyFlags &flags)
 {
 	DoubleProxyInfo * proxy = new DoubleProxyInfo(flags);
-	WebDMA_Pimpl::GetInstance()->InitProxy( proxy, groupName, name );
+	m_pimpl->InitProxy( proxy, groupName, name );
 	return proxy->GetProxy();
 }
 
@@ -77,7 +83,7 @@ BoolProxy WebDMA::CreateBoolProxy(
 	bool default_value)
 {
 	BoolProxyInfo * proxy = new BoolProxyInfo(default_value);
-	WebDMA_Pimpl::GetInstance()->InitProxy( proxy, groupName, name );
+	m_pimpl->InitProxy( proxy, groupName, name );
 	return proxy->GetProxy();
 }
 

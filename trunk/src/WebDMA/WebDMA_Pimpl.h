@@ -65,9 +65,6 @@ class WebDMA_Pimpl {
 	friend class http::server::request_handler;
 
 public:
-	
-	// internal utility functions
-	static WebDMA_Pimpl * GetInstance();
 
 	void InitProxy(
 		DataProxyInfo * proxy, 
@@ -76,14 +73,12 @@ public:
 		
 	// internal functions that start the webserver thread
 	void Enable(const std::string &port, const std::string &rootdir);
-
-	static void Unload();
 	
+	WebDMA_Pimpl();
 	~WebDMA_Pimpl();
 
 private:
 
-	WebDMA_Pimpl();
 	
 	void ThreadFn();
 	
