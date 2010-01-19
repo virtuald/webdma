@@ -71,8 +71,9 @@ public:
 		const std::string &groupName, 
 		const std::string &name);
 		
-	// internal functions that start the webserver thread
-	void Enable(const std::string &port, const std::string &rootdir);
+	// internal functions that start/stop the webserver thread
+	bool Enable(const std::string &port, const std::string &rootdir);
+	bool Disable();
 	
 	WebDMA_Pimpl();
 	~WebDMA_Pimpl();
@@ -102,10 +103,14 @@ private:
 	/// global access lock
 	boost::mutex			m_mutex;
 	
+	/// thread creation/destruction lock
+	boost::mutex			m_thread_mutex;
+	
 	/// thread
 	boost::shared_ptr< boost::thread > m_thread;
 	
 	http::server::server *	m_server;
+	bool					m_server_enabled;
 	
 	bool 					m_thread_created;
 	

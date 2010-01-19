@@ -45,7 +45,13 @@ public:
 		You should call this to start the web server. You may add more
 		proxies after this is called.
 	*/
-	void Enable(const std::string &port = "", const std::string &rootdir = "");
+	bool Enable(const std::string &port = "", const std::string &rootdir = "");
+	
+	/**
+		Optional call to disable the web server. Does not clear existing proxies.
+	*/
+	bool Disable();
+	
 
 	/** 
 		Use this to initialize an integer proxy

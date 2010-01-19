@@ -38,9 +38,14 @@ WebDMA::~WebDMA()
 }
 
 
-void WebDMA::Enable(const std::string &port, const std::string &rootdir)
+bool WebDMA::Enable(const std::string &port, const std::string &rootdir)
 {
-	m_pimpl->Enable(port, rootdir);
+	return m_pimpl->Enable(port, rootdir);
+}
+
+bool WebDMA::Disable()
+{
+	return m_pimpl->Disable();
 }
 
 /*** proxy creation routines ***/
