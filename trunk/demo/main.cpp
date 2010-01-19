@@ -9,37 +9,44 @@
 	#include <unistd.h>
 #endif
 
-int main()
+bool DoWebDMA()
 {
-	IntProxy i1 = WebDMA::CreateIntProxy("Integers", "i1", 
+	WebDMA webdma;
+
+	IntProxy i1 = webdma.CreateIntProxy("Integers", "i1", 
 					IntProxyFlags().default_value(5).minval(0).maxval(10).step(1) );
-	IntProxy i2 = WebDMA::CreateIntProxy("Integers", "i2",
+	IntProxy i2 = webdma.CreateIntProxy("Integers", "i2",
 					IntProxyFlags().default_value(6).minval(0).maxval(10).step(1));
-	IntProxy i3 = WebDMA::CreateIntProxy("Integers", "i1 + i2", 
+	IntProxy i3 = webdma.CreateIntProxy("Integers", "i1 + i2", 
 					IntProxyFlags().default_value(11).readonly());
 
-	FloatProxy f1 = WebDMA::CreateFloatProxy("Floats", "f1", 
+	FloatProxy f1 = webdma.CreateFloatProxy("Floats", "f1", 
 					FloatProxyFlags().default_value(7).minval(-10).maxval(10).step(1) );
-	FloatProxy f2 = WebDMA::CreateFloatProxy("Floats", "f2",
+	FloatProxy f2 = webdma.CreateFloatProxy("Floats", "f2",
 					FloatProxyFlags().default_value(.3F).minval(-1).maxval(1).step(.01F));
-	FloatProxy f3 = WebDMA::CreateFloatProxy("Floats", "f1 + f2",
+	FloatProxy f3 = webdma.CreateFloatProxy("Floats", "f1 + f2",
 					FloatProxyFlags().default_value(7.3F).readonly());
 
-	DoubleProxy d1 = WebDMA::CreateDoubleProxy("Doubles", "d1",
+	DoubleProxy d1 = webdma.CreateDoubleProxy("Doubles", "d1",
 					DoubleProxyFlags().default_value(10).minval(-180).maxval(180).step(1));
-	DoubleProxy d2 = WebDMA::CreateDoubleProxy("Doubles", "d2",
+	DoubleProxy d2 = webdma.CreateDoubleProxy("Doubles", "d2",
 					DoubleProxyFlags().default_value(0).minval(-180).maxval(180).step(1));
-	DoubleProxy d3 = WebDMA::CreateDoubleProxy("Doubles", "d1 + d2",
+	DoubleProxy d3 = webdma.CreateDoubleProxy("Doubles", "d1 + d2",
 					DoubleProxyFlags().default_value(10).readonly());
 	
-	BoolProxy stayOn = WebDMA::CreateBoolProxy("Controls", "Turn server off", true);
+	BoolProxy stayOn = webdma.CreateBoolProxy("Controls", "Turn server off", true);
 	
-	BoolProxy doCount = WebDMA::CreateBoolProxy("Controls", "Do counting", true);
+	BoolProxy doCount = webdma.CreateBoolProxy("Controls", "Do counting", true);
 	
-	IntProxy count = WebDMA::CreateIntProxy("Controls", "counter", 
+	BoolProxy restart = webdma.CreateBoolProxy("Controls", "Restart server after off", false );
+	
+	bool newstuff_enabled = false;
+	BoolProxy newStuff = webdma.CreateBoolProxy("Controls", "Create a new set of proxy objects", false );
+	
+	IntProxy count = webdma.CreateIntProxy("Controls", "counter", 
 					IntProxyFlags().default_value(0).readonly() );
 	
-	WebDMA::Enable("8080", "../www");
+	webdma.Enable("8080", "../www");
 	
 	while (stayOn)
 	{
@@ -51,6 +58,24 @@ int main()
 			count = count + 1;
 	
 		printf("%5d %5.2f %5.2f %d\r", (int)i3, (float)f3, (double)d3, (int)count);
+		
+		if (newStuff && !newstuff_enabled)
+		{					
+			webdma.CreateIntProxy("New Category", "integer", 
+				IntProxyFlags().default_value(11).readonly());
+
+			webdma.CreateFloatProxy("New Category", "float", 
+				FloatProxyFlags().default_value(7).minval(-10).maxval(10).step(1) );
+		
+			webdma.CreateDoubleProxy("New Category", "double",
+				DoubleProxyFlags().default_value(10).minval(-180).maxval(180).step(1));
+					
+			webdma.CreateBoolProxy("New Category", "bool", true);
+			
+			newstuff_enabled = true;
+		}
+		
+		
 	
 #ifdef _MSC_VER
 		Sleep(100);
@@ -58,6 +83,14 @@ int main()
 		usleep(10000);
 #endif
 	}
+	
+	return restart;
+}
+
+
+int main()
+{
+	while( DoWebDMA() );
 
 	return true;
 	
