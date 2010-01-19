@@ -19,8 +19,6 @@
 
 
 #include "WebDMA_Pimpl.h"
-#include <WebDMA/VariableProxy.h>
-
 #include "server/server.hpp"
 
 #include <ctime>
@@ -40,32 +38,13 @@ WebDMA_Pimpl::WebDMA_Pimpl() :
 	m_rootDir("www"),
 	m_current_instance(boost::lexical_cast<std::string>(time(NULL))),
 	m_server(NULL),
+	m_server_enabled(false),
 	m_thread_created(false)
 {}
 
 WebDMA_Pimpl::~WebDMA_Pimpl()
 {
-	bool thread_created = false;
-
-	{
-		lock_guard lock(m_mutex);
-		thread_created = m_thread_created;
-	}
-	
-	// if the thread is created, then join it. Be sure that
-	// we don't hold the lock while it is joined, otherwise
-	// the server will deadlock. the lock must be held when
-	// signaling the server however. 
-	if (thread_created)
-	{
-		{
-			lock_guard lock(m_mutex);
-			if (m_server)
-				m_server->stop();
-		}
-
-		m_thread->join();
-	}
+	Disable();
 }
 
 /// this is the thread that the HTTP server runs on. When the WebDMA_Pimpl singleton
@@ -78,6 +57,10 @@ void WebDMA_Pimpl::ThreadFn()
 		// Initialise server.
 		{
 			lock_guard lock(m_mutex);
+			
+			if (!m_server_enabled)
+				throw std::runtime_error("Server not enabled, thread is exiting");
+			
 			m_server = new http::server::server("0.0.0.0", m_port, m_rootDir, this);
 		}
 	
@@ -97,22 +80,57 @@ void WebDMA_Pimpl::ThreadFn()
 }
 
 
-void WebDMA_Pimpl::Enable(const std::string &port, const std::string &rootdir)
-{
-	lock_guard lock(m_mutex);
-		
-	if (!port.empty())
-		m_port = port;
-		
-	if (!rootdir.empty())
-		m_rootDir = rootdir;
-		
-	// then start the thread
-	if (!m_thread_created)
+bool WebDMA_Pimpl::Enable(const std::string &port, const std::string &rootdir)
+{	
+	lock_guard thread_lock(m_thread_mutex);
+	
+	if (m_thread_created)
+		return false;
+	
 	{
-		m_thread.reset( new boost::thread(boost::bind(&WebDMA_Pimpl::ThreadFn, this)) );
-		m_thread_created = true;
+		lock_guard lock(m_mutex);
+	
+		m_port = port;
+		m_rootDir = rootdir;
+		m_server_enabled = true;
 	}
+	
+	
+	// then start the thread
+	m_thread.reset( new boost::thread(boost::bind(&WebDMA_Pimpl::ThreadFn, this)) );
+	m_thread_created = true;
+	
+	return true;
+}
+
+bool WebDMA_Pimpl::Disable()
+{
+	// if the thread is created, then join it. Be sure that
+	// we don't hold the global lock while it is joined, otherwise
+	// the server will deadlock. the lock must be held when
+	// signaling the server however. 
+	
+	// we can hold the thread lock as much as we want
+
+	lock_guard thread_lock(m_thread_mutex);
+	
+	if (!m_thread_created)
+		return false;
+	
+	{
+		lock_guard lock(m_mutex);
+
+		m_server_enabled = false;
+
+		if (m_server)
+			m_server->stop();
+	}
+	
+	
+	if (m_thread_created)
+		m_thread->join();
+	
+	return true;
 }
 
 
