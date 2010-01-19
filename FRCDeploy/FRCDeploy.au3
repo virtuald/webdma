@@ -55,12 +55,18 @@ $i1 = Int( $teamNumber / 100 )
 
 $server = "10." & $i1 & "." & $i2 & ".2"
 
+ProgressOn( "WebDMA Robot Installation", "Installing to your robot at " & $server )
+
+ProgressSet( 0, "Opening FTP handle" )
+
 ; If we don't get the handle, then oops
 $inet_handle = _FTP_Open( "WebDMA FTP Deployment" )
 If $inet_handle = 0 Then
 	MsgBox( 48, "Error opening FTP handle" )
 	Exit 1
 EndIf
+
+ProgressSet( 10, "Connecting to FTP Server" )
 
 $ftp_handle = _FTP_Connect( $inet_handle, $server, "FRC", "FRC", 1 )
 If  $ftp_handle = 0 Then
@@ -69,17 +75,50 @@ If  $ftp_handle = 0 Then
 EndIf
 
 ; modify the NI-RT file
-; _FTP_FileGet( $ftp_handle, "/ni-rt.ini" )
-; IniFileWrite( )
-;
+$tempFile = @TempDir & "\ni-rt.ini"
+$objectName = @ScriptDir & "\WebDMA.out"
+
+ProgressSet( 20, "Retrieving /ni-rt.ini" )
+
+If _FTP_FileGet( $ftp_handle, "/ni-rt.ini", $tempFile ) = 0 Then
+	MsgBox( 48, "Error", "Error " & @Error & " getting /ni-rt.ini from the robot")
+	Exit 1
+EndIf
+
+ProgressSet( 30, "Modifying ni-rt.ini file" )
+
+$dlls = IniRead( $tempFile, "LVRT", "StartupDlls", "")
+
+If StringInStr( $dlls, "WebDMA.out;" ) = 0 Then
+
+	$dlls = StringStripWS($dlls, 2)
+	If StringRight( $dlls, 1 ) <> ";" Then
+		$dlls = $dlls & ";"
+	EndIf
+	
+	$dlls = $dlls & "WebDMA.out;"
+	IniWrite( $tempFile, "LVRT", "StartupDlls", $dlls)
+
+	ProgressSet(45, "Uploading new ni-rt.ini file" )
+	
+	_FTP_FilePut( $ftp_handle, $tempFile, "/ni-rt.ini" )
+	
+EndIf
+
+FileDelete( $tempFile )
+
+ProgressSet( 60, "Uploading WebDMA.out to /ni-rt/system")
+
 ; Write the object file to the robot
-If _FTP_FilePut( $ftp_handle, @ScriptDir & "\WebDMA.out") = 0 Then
+If _FTP_FilePut( $ftp_handle, @ScriptDir & "\WebDMA.out", "/ni-rt/system/WebDMA.out") = 0 Then
 	MsgBox( 48, "Error", "Error " & @Error & " writing .out file to server" )
 	Exit 2
 EndIf
 	
 	
 ; write the HTML files to the webserver
+
+ProgressSet( 80, "Uploading HTML files to /www" )
 
 ; for each file in www, write it out
 _FTP_DirCreate($ftp_handle, "/www")
@@ -89,11 +128,14 @@ If _FTP_DirPutContents($ftp_handle, @ScriptDir & "\www", "/www", 1) = 0 Then
 	Exit 1
 EndIf
 	
+ProgressSet( 100, "Done" )
+	
 _FTP_Close( $ftp_handle )
 	
-	; write 
-
+ProgressOff()
 
 MsgBox( 0, "Success!", "All WebDMA files have been successfully transferred to your robot")
+
+MsgBox( 0, "Success!", "You must reboot your cRio TWICE to enable WebDMA (see install notes)")
 
 

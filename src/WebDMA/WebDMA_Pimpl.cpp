@@ -31,15 +31,7 @@
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
-#include "StaticDeleter.h"
-
 #define JSON_STATUS(x) "{ \"status\": \"" x "\" }"
-
-static
-WebDMA_Pimpl * m_instance = NULL;
-
-// this ensures that the singleton WebDMA_Pimpl gets deleted at exit
-StaticDeleter<WebDMA_Pimpl> m_deleter(&m_instance);
 
 
 // default constructor
@@ -76,15 +68,6 @@ WebDMA_Pimpl::~WebDMA_Pimpl()
 	}
 }
 
-void WebDMA_Pimpl::Unload()
-{
-	if (m_instance != NULL)
-	{
-		delete m_instance;
-		m_instance = NULL;
-	}
-}
-
 /// this is the thread that the HTTP server runs on. When the WebDMA_Pimpl singleton
 /// instance is destroyed, the server should be signaled to exit and the 
 /// thread will be joined, at which point the object can be fully destroyed
@@ -95,7 +78,7 @@ void WebDMA_Pimpl::ThreadFn()
 		// Initialise server.
 		{
 			lock_guard lock(m_mutex);
-			m_server = new http::server::server("0.0.0.0", m_port, m_rootDir);
+			m_server = new http::server::server("0.0.0.0", m_port, m_rootDir, this);
 		}
 	
 		// Run the server until stopped.
@@ -130,14 +113,6 @@ void WebDMA_Pimpl::Enable(const std::string &port, const std::string &rootdir)
 		m_thread.reset( new boost::thread(boost::bind(&WebDMA_Pimpl::ThreadFn, this)) );
 		m_thread_created = true;
 	}
-}
-
-// internal function
-WebDMA_Pimpl * WebDMA_Pimpl::GetInstance()	
-{
-	if (m_instance == NULL)
-		m_instance = new WebDMA_Pimpl();
-	return m_instance;
 }
 
 

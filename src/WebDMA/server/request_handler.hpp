@@ -15,6 +15,8 @@
 #include <string>
 #include <boost/noncopyable.hpp>
 
+#include "../WebDMA_Pimpl.h"
+
 namespace http {
 namespace server {
 
@@ -27,7 +29,7 @@ class request_handler
 {
 public:
 	/// Construct with a directory containing files to be served.
-	explicit request_handler(const std::string& doc_root);
+	explicit request_handler(const std::string& doc_root, WebDMA_Pimpl * webdma);
 
 	/// Handle a request and produce a reply.
 	void handle_request(const request& req, reply& rep);
@@ -35,6 +37,8 @@ public:
 private:
 	/// The directory containing the files to be served.
 	std::string doc_root_;
+	
+	WebDMA_Pimpl * webdma_;
 	
 	void handle_get_request(const std::string &, reply &rep);
 	

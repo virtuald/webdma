@@ -41,10 +41,10 @@ Source: "..\include\WebDMA\VariableProxyFlags.h"; DestDir: "C:\WindRiver\vxworks
 
 
 [Icons]
-Name: "{group}\WebDMA"; Filename: "{app}\FRCDeploy.exe"
+Name: "{group}\WebDMA FRC Robot Upload"; Filename: "{app}\FRCDeploy.exe"
 
 [Run]
-Filename: "{app}\FRCDeploy.exe"; Description: "{cm:LaunchProgram,WebDMA}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\FRCDeploy.exe"; Description: "{cm:LaunchProgram,WebDMA FRC Robot Upload}"; Flags: nowait postinstall skipifsilent
 
 
 
