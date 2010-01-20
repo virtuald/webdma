@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="target"
-	ProjectGUID="{D5637782-B0C3-4608-900D-BFD12552688A}"
-	RootNamespace="target"
+	Name="WebDMADemo"
+	ProjectGUID="{05BA1FE9-DFA5-4E1A-8358-5C93DA4C61E8}"
+	RootNamespace="WebDMADemo"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="C:\Program Files\boost\boost_1_38"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0501"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -116,7 +116,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="C:\Program Files\boost\boost_1_38"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -167,6 +167,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{D5637782-B0C3-4608-900D-BFD12552688A}"
+			RelativePathToProject=".\src\WebDMA.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
@@ -178,130 +182,18 @@
 				RelativePath=".\main.cpp"
 				>
 			</File>
-			<Filter
-				Name="WebDMA"
-				>
-				<File
-					RelativePath=".\WebDMA\VariableProxy.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WebDMA\WebDMA.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WebDMA\WebDMA_Pimpl.cpp"
-					>
-				</File>
-				<Filter
-					Name="server"
-					>
-					<File
-						RelativePath=".\WebDMA\server\connection.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\connection_manager.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\mime_types.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\reply.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\request_handler.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\request_parser.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\server.cpp"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="Resource Files"
-				Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-				UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-				>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<Filter
-				Name="WebDMA"
-				>
-				<File
-					RelativePath=".\WebDMA\DataProxyInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WebDMA\StaticDeleter.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WebDMA\VariableProxy.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WebDMA\VariableProxyFlags.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WebDMA\WebDMA.h"
-					>
-				</File>
-				<Filter
-					Name="server"
-					>
-					<File
-						RelativePath=".\WebDMA\server\connection.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\connection_manager.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\header.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\mime_types.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\reply.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\request.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\request_handler.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\request_parser.hpp"
-						>
-					</File>
-					<File
-						RelativePath=".\WebDMA\server\server.hpp"
-						>
-					</File>
-				</Filter>
-			</Filter>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			>
 		</Filter>
 	</Files>
 	<Globals>

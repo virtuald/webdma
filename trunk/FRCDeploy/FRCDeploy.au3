@@ -136,6 +136,6 @@ ProgressOff()
 
 MsgBox( 0, "Success!", "All WebDMA files have been successfully transferred to your robot")
 
-MsgBox( 0, "Success!", "You must reboot your cRio TWICE to enable WebDMA (see install notes)")
+MsgBox( 0, "Success!", "You must reboot your cRio before you can use WebDMA.")
 
 

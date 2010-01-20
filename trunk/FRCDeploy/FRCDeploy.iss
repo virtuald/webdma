@@ -29,7 +29,12 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "FRCDeploy.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 ; WebDMA object file installation
-Source: "..\src\PPC603gnu\WebDMA\Debug\WebDMA.out"; DestDir: "{app}"; Flags: ignoreversion
+
+; Debug version
+;Source: "..\src\PPC603gnu\WebDMA\Debug\WebDMA.out"; DestDir: "{app}"; Flags: ignoreversion
+
+; Release version (recommended, its a lot smaller -- boost is really large
+Source: "..\src\PPC603gnu\WebDMA\NonDebug\WebDMA.out"; DestDir: "{app}"; Flags: ignoreversion
 
 ; WWW files installation
 Source: "..\www\*"; DestDir: "{app}\www"; Flags: ignoreversion createallsubdirs recursesubdirs 
