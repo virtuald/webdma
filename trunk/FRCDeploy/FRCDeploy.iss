@@ -16,7 +16,7 @@ DefaultDirName={pf}\WebDMA
 DefaultGroupName=WebDMA
 LicenseFile=C:\Documents and Settings\dspicuzz\My Documents\webdma\LICENSE
 InfoAfterFile=C:\Documents and Settings\dspicuzz\My Documents\webdma\README.FRC
-OutputBaseFilename=WebDMAInstaller
+OutputBaseFilename=WebDMAInstaller-0.2
 Compression=lzma
 SolidCompression=yes
 

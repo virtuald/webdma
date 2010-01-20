@@ -24,7 +24,11 @@
 
 #ce ----------------------------------------------------------------------------
 
-; Script Start - Add your code below here
+
+If MsgBox( 36, "WARNING WARNING WARNING", "WARNING: This script will WRITE DIRECTLY TO YOUR ROBOT and modify files on it via FTP if you choose to continue." & @CRLF & @CRLF & "While I have tested this and this works just fine for our team on our cRio with no ill effects, I cannot be held responsible for your robot. This installer is not sanctioned or associated with National Instruments, Wind River, or FIRST Robotics. In particular, this may void your warranty, render your cRio useless, and COST YOUR TEAM A LOT OF MONEY." & @CRLF & @CRLF & "If you are a student: DO NOT INSTALL THIS ON YOUR ROBOT WITHOUT ASKING THE ADULT LEADER OF YOUR TEAM." & @CRLF & @CRLF & "Click Yes to install WebDMA on your robot. Are you willing to accept these risks?") = 7 Then
+	Exit 5
+EndIf
+
 
 #Include <FTPEx.au3>
 
