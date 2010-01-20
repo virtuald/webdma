@@ -10,8 +10,8 @@
   
   * *Q:* So that means you can control a robot with a webpage? You're pulling my leg!
   
-   A: Actually, I'm not. It works just fine, download the code and see. I'm hoping to put up a video on YouTube in the near future, its pretty sweet. 
+   A: Actually, I'm not. It works just fine, download the code and see. There is a sample FRC program provided with the FRC installer and in the source distribution. 
 
   * *Q:* What operating systems are supported?
   
-  A: Any operating system that you can run a C++ compiler supported by Boost, and also on the NI-cRIO/vxWorks used in the 2009 FIRST Robotics controller
+  A: Any operating system that you can run a C++ compiler supported by Boost, and also on the NI-cRIO/vxWorks used in the 2009/2010 FIRST Robotics controller
