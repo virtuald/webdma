@@ -85,6 +85,7 @@ AC_CONFIG_FILES([
 	include/WebDMA/Makefile
 	src/Makefile
 	demo/Makefile
+	demo/Normal/Makefile
 ])
 
 AC_OUTPUT
