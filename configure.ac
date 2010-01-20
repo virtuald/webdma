@@ -4,7 +4,7 @@
 AC_INIT([WebDMA], [0.2])
 AC_PREREQ([2.63])
 AC_CONFIG_AUX_DIR([build-aux])
-AC_CONFIG_SRCDIR([demo/main.cpp])
+AC_CONFIG_SRCDIR([demo/Normal/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_REVISION($Revision$)
 
