@@ -1,0 +1,160 @@
+    WebDMA
+    Copyright (C) 2009-2010 Dustin Spicuzza <dustin@virtualroadside.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License v3 as published by
+    the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	
+---------------------------------------------------------------------------
+
+	Anything not specifically mentioned below or noted in the file is 
+	released under the terms of the GNU General Public License, version 3. 
+
+	--
+	
+	Portions of the Boost library are distributed with WebDMA. These are 
+	released under the Boost software license, see boost/LICENSE_1_0.txt
+	
+	http://www.boost.org/
+	
+	--
+	
+	Additionally, the HTTP server used by WebDMA is based on the example 
+	HTTP server included with the Boost ASIO library. This code (located
+	in WebDMA/server/ ) is licensed	under the Boost software license, 
+	found in WebDMA/server/LICENSE_1_0.txt
+	
+	http://www.boost.org/doc/libs/1_38_0/doc/html/boost_asio.html
+	
+	--
+	
+	jQuery is the core of the HTML interface that WebDMA uses. It is 
+	released under the MIT or GPL license, depending on your preference.
+	
+	http://www.jquery.com/
+	
+	--
+	
+	Flot 0.5 is included (but not used yet), and is released under the 
+	MIT license. 
+	
+	http://code.google.com/p/flot/
+
+---------------------------------------------------------------------------
+
+WebDMA was created to allow our FIRST Robotics team to tune our robot 
+in an easy to use and intuitive way via any modern web browser.
+
+Using C++ operator overloading, WebDMA provides proxy objects that your 
+application can use as normal variables which can be manipulated or 
+displayed by your application via a configurable jQuery/javascript 
+powered Web 2.0 interface hosted by an lightweight embedded web server.
+
+Despite that WebDMA was specifically created for use in FIRST Robotics
+on the NI-cRio/vxWorks platform, it uses the Boost ASIO portable
+networking library and Boost Thread portable threads library and is
+usable on any platform supported by these Boost libraries (tested on
+Boost 1.38, requires a patch for vxWorks). 
+
+
+Build Requirements/Instructions
+-------------------------------
+
+All platforms must have the Boost header-only libraries installed. In
+addition, the Boost Thread and Boost System libraries must be installed.
+
+Any platform and compiler supported by Boost and Boost ASIO should 
+probably work with WebDMA just fine.
+
+
+FIRST Robotics (Wind River vxWorks):
+		
+	If you just want to use WebDMA, I recommend just using the WebDMA
+	FRC binary installer (available on the WebDMA download site). 
+	This will setup your environment properly for WebDMA, and doesn't 
+	require installation of boost header files. 
+
+	- You need the FRC Wind River 3.0 development environment, and your
+	robot must be flashed with the C++ cRio image
+	
+	- Boost 1.38 headers must be installed on your build machine somewhere,
+	and the header files must be patched with the included patch. The source
+	code for the necessary libraries is distributed with WebDMA. 
+	See instructions below for installation thoughts. 
+
+	- A program that can apply patches. I would recommend GNU patch, see
+	http://gnuwin32.sourceforge.net/packages/patch.htm
+
+	
+	
+Windows:
+
+	- I recommend that you use the BoostPro installer to install boost, its
+	a bit easier. http://www.boostpro.com/download/
+	
+	- If you do not install or build all of the boost libraries, then you
+	must modify boost/config/user.hpp with the following defines:
+	
+		#define BOOST_DATE_TIME_NO_LIB
+		#define BOOST_REGEX_NO_LIB
+		
+	- Open WebDMA.sln to build the WebDMA library and the associated demo
+	application
+		
+Other platforms:
+
+	- The autotools build files create a library you can link to using 
+	libtool. 
+	
+	./configure
+	make
+	make install
+
+
+How to use
+----------
+
+Quick start:
+
+- Add #include <WebDMA/WebDMA.h> to your source file.
+- Create a bunch of proxy objects (see WebDMA.h for the appropriate functions)
+- Call WebDMA::Enable( [port], [webserver root dir]);
+
+See demo/main.cpp for an example application that creates a bunch of proxy objects
+and launches a webserver that you can access by going to http://localhost:8080
+in your favorite web browser. 
+
+The webserver defaults to port 8080, but you can select the port when you call
+the WebDMA::Enable() function. 
+
+
+Web Interface
+-------------
+
+Something that is rather important to keep in mind is that however you use
+the application, it requires a directory of files that make up the web 
+interface, as these files are currently *not* internal to the library. An
+advantage of this is that you can modify the interface to be whatever you 
+want it to look like. 
+
+
+Comments/Bugs?
+--------------
+
+The project's homepage is http://code.google.com/p/webdma/ , and you can
+access a wiki, SVN, and bug trackers there. 
+
+Patches for bugs and improvements are welcomed. There is a ton of potential
+in the javascript interface related to data aquisition (this is why the Flot
+library is included), it just needs to be done at some point.  
+
+Dustin Spicuzza
+dustin@virtualroadside.com
