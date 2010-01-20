@@ -44,6 +44,14 @@ Source: "..\include\WebDMA\WebDMA.h"; DestDir: "C:\WindRiver\vxworks-6.3\target\
 Source: "..\include\WebDMA\VariableProxy.h"; DestDir: "C:\WindRiver\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion
 Source: "..\include\WebDMA\VariableProxyFlags.h"; DestDir: "C:\WindRiver\vxworks-6.3\target\h\WebDMA"; Flags: ignoreversion
 
+; Example project installation
+Source: "..\demo\FRCWindRiver\.cproject"; DestDir: "C:\WindRiver\vxworks-6.3\target\src\demo\SimpleWebDMADemo"; Flags: ignoreversion
+Source: "..\demo\FRCWindRiver\.project"; DestDir: "C:\WindRiver\vxworks-6.3\target\src\demo\SimpleWebDMADemo"; Flags: ignoreversion
+Source: "..\demo\FRCWindRiver\.wrmakefile"; DestDir: "C:\WindRiver\vxworks-6.3\target\src\demo\SimpleWebDMADemo"; Flags: ignoreversion
+Source: "..\demo\FRCWindRiver\.wrproject"; DestDir: "C:\WindRiver\vxworks-6.3\target\src\demo\SimpleWebDMADemo"; Flags: ignoreversion
+Source: "..\demo\FRCWindRiver\MyRobot.cpp"; DestDir: "C:\WindRiver\vxworks-6.3\target\src\demo\SimpleWebDMADemo"; Flags: ignoreversion
+Source: "..\demo\FRCWindRiver\sample.txt"; DestDir: "C:\WindRiver\vxworks-6.3\target\src\demo\SimpleWebDMADemo"; Flags: ignoreversion
+Source: "..\demo\FRCWindRiver\sample.properties"; DestDir: "C:\WindRiver\vxworks-6.3\target\src\demo\SimpleWebDMADemo"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\WebDMA FRC Robot Upload"; Filename: "{app}\FRCDeploy.exe"

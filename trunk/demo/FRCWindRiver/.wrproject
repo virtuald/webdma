@@ -244,12 +244,12 @@
         </mapAttribute>
     </attributes>
     <buildtargets>
-        <buildtarget buildtool="Linker" name="SimpleWebDMADemo" passed="false" targetname="SimpleTemplate">
+        <buildtarget buildtool="Linker" name="SimpleWebDMADemo" passed="false" targetname="SimpleWebDMADemo">
             <contents>
-                <buildtargetreference name="/SimpleWebDMADemo/SimpleTemplate_partialImage"/>
+                <buildtargetreference name="/SimpleWebDMADemo/SimpleWebDMADemo_partialImage"/>
             </contents>
         </buildtarget>
-        <buildtarget buildtool="Partial Image Linker" name="SimpleWebDMADemo_partialImage" passed="true" targetname="SimpleTemplate_partialImage">
+        <buildtarget buildtool="Partial Image Linker" name="SimpleWebDMADemo_partialImage" passed="true" targetname="SimpleWebDMADemo_partialImage">
             <contents>
                 <folder name="/SimpleWebDMADemo" recursive="true"/>
             </contents>

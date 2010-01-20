@@ -46,7 +46,7 @@ bool DoWebDMA()
 	IntProxy count = webdma.CreateIntProxy("Controls", "counter", 
 					IntProxyFlags().default_value(0).readonly() );
 	
-	webdma.Enable("8080", "../www");
+	webdma.Enable("8080", "../../www");
 	
 	while (stayOn)
 	{
