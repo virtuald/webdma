@@ -17,8 +17,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef WebDMA_Pimpl_WebDMA_Pimpl_H
-#define WebDMA_Pimpl_WebDMA_Pimpl_H
+#ifndef WebDMA_WebDMA_Pimpl_H
+#define WebDMA_WebDMA_Pimpl_H
 
 #include <string>
 #include <vector>

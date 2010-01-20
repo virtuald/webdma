@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "target", "target.vcproj", "{D5637782-B0C3-4608-900D-BFD12552688A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebDMA", "src\WebDMA.vcproj", "{D5637782-B0C3-4608-900D-BFD12552688A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebDMADemo", "demo\WebDMADemo.vcproj", "{05BA1FE9-DFA5-4E1A-8358-5C93DA4C61E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,10 @@ Global
 		{D5637782-B0C3-4608-900D-BFD12552688A}.Debug|Win32.Build.0 = Debug|Win32
 		{D5637782-B0C3-4608-900D-BFD12552688A}.Release|Win32.ActiveCfg = Release|Win32
 		{D5637782-B0C3-4608-900D-BFD12552688A}.Release|Win32.Build.0 = Release|Win32
+		{05BA1FE9-DFA5-4E1A-8358-5C93DA4C61E8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{05BA1FE9-DFA5-4E1A-8358-5C93DA4C61E8}.Debug|Win32.Build.0 = Debug|Win32
+		{05BA1FE9-DFA5-4E1A-8358-5C93DA4C61E8}.Release|Win32.ActiveCfg = Release|Win32
+		{05BA1FE9-DFA5-4E1A-8358-5C93DA4C61E8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
