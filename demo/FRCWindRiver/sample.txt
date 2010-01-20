@@ -1,0 +1,18 @@
+WebDMA FRC Simple Robot Demo
+--------------------------------
+
+This program is a really simple example program 
+that allows you to easily determine if WebDMA is
+working properly on your robot. This program 
+allows you to control the Jaguars attached to the 
+first two PWMs via the web interface provided by
+WebDMA.
+
+You must load the robot with the WebDMA object 
+file using the "WebDMA FRC Robot Upload" program 
+before this will link properly.  
+
+To view the web interface, start the program
+and view http://10.xx.yy.2/ where xx and yy
+are the first two and last two digits of your
+team number (ie, team 2423 uses 10.24.23.2 )
