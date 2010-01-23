@@ -29,10 +29,12 @@ public:
 		GetWatchdog().SetExpiration(0.1);
 		
 		// motor control parameters:
-		//		start: 0
-		//		min: -1
-		//		max: 1
-		//		step value: 0.1 (this means they
+		//      start: 0
+		//      min: -1
+		//      max: 1
+		//      step value: 0.1 (this means the values of the proxy object
+		//                       can be increased/decreased in steps of this
+		//                       amount)
 		
 		motor1speed = webdma.CreateFloatProxy("Motor 1", "Speed",
 						FloatProxyFlags().default_value(0.0F).minval(-1.0F).maxval(1.0F).step(0.1) );
@@ -57,9 +59,6 @@ public:
 	{
 	}
 
-	/**
-	 * Runs the motors with arcade steering. 
-	 */
 	void OperatorControl(void)
 	{
 		GetWatchdog().SetEnabled(true);
