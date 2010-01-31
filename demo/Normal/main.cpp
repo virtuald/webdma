@@ -8,6 +8,7 @@
 	#include <crtdbg.h>
 	#include <windows.h>
 #else
+	#include <stdio.h>
 	#include <unistd.h>
 #endif
 
