@@ -23,9 +23,12 @@
 #include "WebDMA_Pimpl.h"
 
 
-// default constructor -- private, never created
-WebDMA::WebDMA() :
-	m_pimpl( new WebDMA_Pimpl() )
+WebDMA::WebDMA(
+	const std::string &port, 
+	const std::string &rootdir,
+	const std::string &interface
+) :
+	m_pimpl( new WebDMA_Pimpl(port, rootdir, interface) )
 {
 	webdma_instance = this;
 }
@@ -35,18 +38,22 @@ WebDMA::~WebDMA()
 {
 	delete m_pimpl;
 	m_pimpl = NULL;
+	
+	if (webdma_instance == this)
+		webdma_instance = NULL;
 }
 
 
-bool WebDMA::Enable(const std::string &port, const std::string &rootdir)
+bool WebDMA::Enable()
 {
-	return m_pimpl->Enable(port, rootdir);
+	return m_pimpl->Enable();
 }
 
 bool WebDMA::Disable()
 {
 	return m_pimpl->Disable();
 }
+
 
 /*** proxy creation routines ***/
 

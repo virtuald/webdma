@@ -72,15 +72,19 @@ public:
 		const std::string &name);
 		
 	// internal functions that start/stop the webserver thread
-	bool Enable(const std::string &port, const std::string &rootdir);
+	bool Enable();
 	bool Disable();
 	
-	WebDMA_Pimpl();
+	// there is explicitly not a Clear() function, because otherwise
+	// you have a bunch of proxy variables that have lots of dangling
+	// pointers. Of course, I suppose that is the case if you destroy
+	// the WebDMA object too... but thats a lot more explicit
+	
+	WebDMA_Pimpl(const std::string &, const std::string &, const std::string &);
 	~WebDMA_Pimpl();
 
 private:
 
-	
 	void ThreadFn();
 	
 	// functions used to process/generate html response
@@ -95,13 +99,16 @@ private:
 	/// root directory where webpages are found
 	std::string				m_rootDir;
 	
+	/// interface to listen on
+	std::string				m_interface;
+	
 	/// each ajax request is compared against this, and if it doesn't
 	/// match then it means the page must reload. This is updated each time
 	/// a new proxy is added or deleted
 	std::string 			m_current_instance;
 	
-	/// global access lock
-	boost::mutex			m_mutex;
+	/// global server access lock
+	boost::mutex			m_server_mutex;
 	
 	/// thread creation/destruction lock
 	boost::mutex			m_thread_mutex;
@@ -109,7 +116,9 @@ private:
 	/// thread
 	boost::shared_ptr< boost::thread > m_thread;
 	
-	http::server::server *	m_server;
+	/// server
+	boost::shared_ptr<http::server::server>	m_server;
+	
 	bool					m_server_enabled;
 	
 	bool 					m_thread_created;

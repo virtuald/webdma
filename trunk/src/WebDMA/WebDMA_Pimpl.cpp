@@ -24,6 +24,8 @@
 #include <ctime>
 #include <iostream>
 
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+
 #include <boost/tokenizer.hpp>
 
 #include <boost/foreach.hpp>
@@ -32,71 +34,97 @@
 #define JSON_STATUS(x) "{ \"status\": \"" x "\" }"
 
 
+#ifdef _WRS_KERNEL
+
+/* library startup message for FRC Robots */
+
+extern "C" {
+	int WebDMA_StartupLibraryInit()
+	{
+		printf("WebDMA 0.2.1 is loaded\n");
+		return 0;
+	}
+}
+
+#endif
+
+
+
+
+
 // default constructor
-WebDMA_Pimpl::WebDMA_Pimpl() :
-	m_port("80"),
-	m_rootDir("www"),
+WebDMA_Pimpl::WebDMA_Pimpl(
+	const std::string &port, 
+	const std::string &rootdir,
+	const std::string &interface
+) :
+	m_port(port),
+	m_rootDir(rootdir),
+	m_interface(interface),
 	m_current_instance(boost::lexical_cast<std::string>(time(NULL))),
-	m_server(NULL),
 	m_server_enabled(false),
 	m_thread_created(false)
 {}
 
+// destructor
 WebDMA_Pimpl::~WebDMA_Pimpl()
 {
 	Disable();
 }
 
-/// this is the thread that the HTTP server runs on. When the WebDMA_Pimpl singleton
-/// instance is destroyed, the server should be signaled to exit and the 
-/// thread will be joined, at which point the object can be fully destroyed
+/// this is the thread that the HTTP server runs on. 
 void WebDMA_Pimpl::ThreadFn()
 {
+	// note: don't grab the thread lock in this FN
+	
+	// we use a shared_ptr here to ensure that the created server
+	// object gets destroyed in this thread when it exits, unless
+	// the parent thread exits after this one does. 
+
+	// the old solution used a join() in the destructor of WebDMA_Pimpl,
+	// but that caused some problems on vxWorks because something was
+	// going out of scope before it should have.. or something like that
+	boost::shared_ptr<http::server::server>	server;
+	
 	try
 	{
 		// Initialise server.
 		{
-			lock_guard lock(m_mutex);
+			lock_guard lock(m_server_mutex);
 			
 			if (!m_server_enabled)
 				throw std::runtime_error("Server not enabled, thread is exiting");
 			
-			m_server = new http::server::server("0.0.0.0", m_port, m_rootDir, this);
+			m_server.reset(new http::server::server(m_interface, m_port, m_rootDir, this));
+			server = m_server;
 		}
 	
-		// Run the server until stopped.
-		m_server->run();
+		// Run the server until stopped. Do this outside of the lock. 
+		server->run();
 	}
 	catch (std::exception &e)
 	{
-		std::cerr << "WebDMA_Pimpl Server exception: " << e.what() << std::endl;
-	}
-	
-	{
-		lock_guard lock(m_mutex);
-		delete m_server;
-		m_server = NULL;
+		std::cerr << "WebDMA Server exception: " << e.what() << std::endl;
 	}
 }
 
-
-bool WebDMA_Pimpl::Enable(const std::string &port, const std::string &rootdir)
+bool WebDMA_Pimpl::Enable()
 {	
 	lock_guard thread_lock(m_thread_mutex);
 	
+	// dont call enable twice
 	if (m_thread_created)
 		return false;
 	
 	{
-		lock_guard lock(m_mutex);
-	
-		m_port = port;
-		m_rootDir = rootdir;
+		// set the 'enable server' flag
+		lock_guard lock(m_server_mutex);
 		m_server_enabled = true;
 	}
 	
-	
-	// then start the thread
+	// then start the thread and return
+	// note: we pass the thread an instance of itself to ensure that it doesn't
+	// die prematurely and the destructor gets called correctly
 	m_thread.reset( new boost::thread(boost::bind(&WebDMA_Pimpl::ThreadFn, this)) );
 	m_thread_created = true;
 	
@@ -105,31 +133,22 @@ bool WebDMA_Pimpl::Enable(const std::string &port, const std::string &rootdir)
 
 bool WebDMA_Pimpl::Disable()
 {
-	// if the thread is created, then join it. Be sure that
-	// we don't hold the global lock while it is joined, otherwise
-	// the server will deadlock. the lock must be held when
-	// signaling the server however. 
-	
-	// we can hold the thread lock as much as we want
-
 	lock_guard thread_lock(m_thread_mutex);
-	
+		
 	if (!m_thread_created)
 		return false;
-	
+		
 	{
-		lock_guard lock(m_mutex);
+		lock_guard lock(m_server_mutex);
 
 		m_server_enabled = false;
-
-		if (m_server)
+		
+		// if the server exists, signal it and exit
+		if (m_server.get())
 			m_server->stop();
 	}
 	
-	
-	if (m_thread_created)
-		m_thread->join();
-	
+	m_thread_created = false;	
 	return true;
 }
 
@@ -138,7 +157,7 @@ bool WebDMA_Pimpl::Disable()
 std::string WebDMA_Pimpl::get_html()
 {
 	// lock globally
-	lock_guard lock(m_mutex);
+	lock_guard lock(m_server_mutex);
 
 	// generate some HTML for this thing
 	std::string html;
@@ -273,7 +292,7 @@ std::string WebDMA_Pimpl::ProcessRequest(const std::string &post_data)
 	
 	// ok, if everything is good so modify the proxy
 	{
-		lock_guard lock(m_mutex);
+		lock_guard lock(m_server_mutex);
 	
 		if (m_groups.size() < group ||
 			m_groups[group]->variables.size() < variable ||
@@ -294,7 +313,7 @@ void WebDMA_Pimpl::InitProxy(
 	const std::string &groupName, 
 	const std::string &name)
 {
-	lock_guard lock(m_mutex);
+	lock_guard lock(m_server_mutex);
 
 	DataProxyGroupPtr ptr;
 	

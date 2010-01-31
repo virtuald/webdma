@@ -1,17 +1,22 @@
 
-#include <stdio.h>
-
 #include <WebDMA/WebDMA.h>
 
 #ifdef _MSC_VER
+
+	#define _CRTDBG_MAP_ALLOC
+	#include <stdlib.h>
+	#include <crtdbg.h>
 	#include <windows.h>
 #else
 	#include <unistd.h>
 #endif
 
+
+
+
 bool DoWebDMA()
 {
-	WebDMA webdma;
+	WebDMA webdma("8080", "../../www");
 
 	IntProxy i1 = webdma.CreateIntProxy("Integers", "i1", 
 					IntProxyFlags().default_value(5).minval(0).maxval(10).step(1) );
@@ -46,7 +51,7 @@ bool DoWebDMA()
 	IntProxy count = webdma.CreateIntProxy("Controls", "counter", 
 					IntProxyFlags().default_value(0).readonly() );
 	
-	webdma.Enable("8080", "../../www");
+	webdma.Enable();
 	
 	while (stayOn)
 	{
@@ -90,6 +95,10 @@ bool DoWebDMA()
 
 int main()
 {
+#ifdef _MSC_VER
+	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
+
 	while( DoWebDMA() );
 
 	return true;

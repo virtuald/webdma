@@ -28,6 +28,24 @@
 class WebDMA_Pimpl;
 
 
+#ifdef _WRS_KERNEL
+
+	// sensible defaults for FRC teams if you use the installer
+	#define DEFAULT_WEBDMA_PORT 		"80"
+	#define DEFAULT_WEBDMA_ROOTDIR 		"/www"
+	#define DEFAULT_WEBDMA_INTERFACE 	"0.0.0.0"
+	
+#else
+
+	// otherwise use these defaults
+	#define DEFAULT_WEBDMA_PORT 		"8080"
+	#define DEFAULT_WEBDMA_ROOTDIR 		"www"
+	#define DEFAULT_WEBDMA_INTERFACE 	"127.0.0.1"
+	
+#endif
+
+
+
 /**
 	\class WebDMA
 	\brief Singleton class used to allow users to remotely modify variables
@@ -38,19 +56,39 @@ class WebDMA_Pimpl;
 class WebDMA {
 public:
 
-	WebDMA();
+	/**
+		Default constructor, specify the port/root directory
+		of the server here. Yes, port is a string. 
+		
+		The server is not enabled by default, you must call Enable()
+		
+		@param port			Port that the webserver should listen on
+		@param rootdir		Root directory of the webserver
+		@param interface	Address of network interface that WebDMA should 
+							listen on
+	*/
+	WebDMA(
+		const std::string &port = DEFAULT_WEBDMA_PORT, 
+		const std::string &rootdir = DEFAULT_WEBDMA_ROOTDIR,
+		const std::string &interface = DEFAULT_WEBDMA_INTERFACE
+	);
+	
+	
 	~WebDMA();
-
+	
 	/**
 		You should call this to start the web server. You may add more
 		proxies after this is called.
 	*/
-	bool Enable(const std::string &port = "", const std::string &rootdir = "");
+	bool Enable();	
 	
 	/**
-		Optional call to disable the web server. Does not clear existing proxies.
+		Optional call to disable the web server. Does NOT clear existing proxies.
+		
+		@param seconds 		Number of seconds to wait for the WebDMA thread 
+							to exit before giving up
 	*/
-	bool Disable();
+	bool Disable();	
 	
 
 	/** 
@@ -102,7 +140,7 @@ private:
 	// no copying/assigning
 	WebDMA(const WebDMA&);
 	WebDMA& operator=(const WebDMA&);
-
+	
 	WebDMA_Pimpl * m_pimpl;
 };
 

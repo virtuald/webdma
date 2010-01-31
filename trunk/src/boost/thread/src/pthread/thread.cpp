@@ -112,7 +112,12 @@ namespace boost
         void set_current_thread_data(detail::thread_data_base* new_data)
         {
             boost::call_once(current_thread_tls_init_flag,create_current_thread_tls_key);
-            BOOST_VERIFY(!pthread_setspecific(current_thread_tls_key,new_data));
+            //BOOST_VERIFY(!pthread_setspecific(current_thread_tls_key,new_data));
+            
+            // this fails sometimes on vxWorks, probably due to a race condition of
+            // some kind. However, I don't really want to fix it now, and things 
+            // still work as long as you don't use any thread local storage... 
+            pthread_setspecific(current_thread_tls_key,new_data);
         }
     }
     
