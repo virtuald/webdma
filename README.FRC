@@ -36,7 +36,7 @@ And then add the following line to the constructor of RobotMain (or whatever):
 	IntProxy i1 = webdma.CreateIntProxy("Integers", "i1", 
            IntProxyFlags().default_value(5).minval(0).maxval(10).step(1) );
 					
-	webdma.Enable("80");
+	webdma.Enable();
 	
 And thats it (we're not going to use it or anything. If you were going to use
 it, then you would need to store the IntProxy object somewhere where it can be

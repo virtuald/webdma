@@ -126,14 +126,14 @@ Quick start:
 
 - Add #include <WebDMA/WebDMA.h> to your source file.
 - Create a bunch of proxy objects (see WebDMA.h for the appropriate functions)
-- Call WebDMA::Enable( [port], [webserver root dir]);
+- Call WebDMA::Enable();
 
 See demo/main.cpp for an example application that creates a bunch of proxy objects
 and launches a webserver that you can access by going to http://localhost:8080
 in your favorite web browser. 
 
-The webserver defaults to port 8080, but you can select the port when you call
-the WebDMA::Enable() function. 
+The webserver defaults to port 8080, but you can select the port and the interface
+that it listens on in the WebDMA constructor. 
 
 
 Web Interface

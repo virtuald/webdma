@@ -7,16 +7,16 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{55BFAD25-4C79-4365-9271-A18FEF6516E1}
 AppName=WebDMA
-AppVerName=WebDMA 0.2
+AppVerName=WebDMA 0.2.1
 AppPublisher=Dustin Spicuzza
 AppPublisherURL=http://code.google.com/p/webdma/
 AppSupportURL=http://code.google.com/p/webdma/
 AppUpdatesURL=http://code.google.com/p/webdma/
 DefaultDirName={pf}\WebDMA
 DefaultGroupName=WebDMA
-LicenseFile=C:\Documents and Settings\dspicuzz\My Documents\webdma\LICENSE
-InfoAfterFile=C:\Documents and Settings\dspicuzz\My Documents\webdma\README.FRC
-OutputBaseFilename=WebDMAInstaller-0.2
+LicenseFile=..\LICENSE
+InfoAfterFile=..\README.FRC
+OutputBaseFilename=WebDMAInstaller-0.2.1
 Compression=lzma
 SolidCompression=yes
 

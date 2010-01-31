@@ -52,7 +52,7 @@ public:
 		
 		// finally enable the web server (note: you can create proxies
 		// after you've enabled the web server too)
-		webdma.Enable("80", "/www");
+		webdma.Enable();
 	}
 
 	void Autonomous(void)
