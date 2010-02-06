@@ -48,6 +48,8 @@ private:
 	PIDSource *m_pidInput;
 	PIDOutput *m_pidOutput;
 	Notifier *m_controlLoop;
+	
+	FloatProxy m_pidInput_value;
 
 	static void CallCalculate(void *controller);
 	void Calculate();
