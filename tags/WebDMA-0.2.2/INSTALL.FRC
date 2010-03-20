@@ -1,0 +1,211 @@
+    WebDMA
+    Copyright (C) 2009-2010 Dustin Spicuzza <dustin@virtualroadside.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License v3 as published by
+    the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	
+---------------------------------------------------------------------------
+
+If you just want to use WebDMA on your robot, and not build it, then
+download the WebDMA FRC installer from the WebDMA project site. Building
+WebDMA from scratch is a bit annoying. 
+
+
+Manual build/installation instructions for FIRST Robotics (advanced)
+--------------------------------------------------------------------
+
+This guide assumes that you know how to build projects in the Wind River 
+environment, and that you know how to do basic things like load the
+project onto a robot. If you don't, then I would recommend reading the
+C++ programming guide that comes with the Wind River environment.
+
+The most updated version of these are also contained on the WebDMA wiki. 
+
+
+Installing GNU Patch
+--------------------
+
+The boost header files need to be patched to work with vxWorks. You do not 
+need to use GNU Patch to do the patching, but the instructions contained 
+here use it. There are a number of programs that can handle patch files. 
+
+Download the complete package without sources from the GNUWin32 website, at
+http://gnuwin32.sourceforge.net/packages/patch.htm
+
+Go ahead and install it to the default location, then add the bin directory 
+to your path:
+
+Windows XP:
+	- Right click on "My Computer" (might be in your start menu)
+	- Select 'properties'
+	- In the dialog, select the 'advanced' tab
+	- Click 'Environment Variables'
+	- Click the 'PATH' variable in one of the lists (probably better to
+	do the user variables), and then click 'edit' and add the following
+	string to the end of it: ";C:\Program Files\GnuWin32\bin". If you
+	didn't install it to the default location, then change the path to
+	whatever that was and append a '\bin' to it.
+
+	Now verify that it works. 
+	
+	- Open a command prompt (Start -> Run -> type 'cmd' and hit OK)
+	- type 'patch --help' and hit enter. If it works, then a bunch of 
+	options for patch are shown. 
+	
+
+Installing Boost
+----------------
+
+Your project MUST use the gcc compiler, but the example projects included
+with the FRC installation already have gcc selected by default. 
+
+You need to download the Boost 1.38 source code, and install the header
+files on your machine somewhere. There is a patch that comes with WebDMA
+to allow compilation with vxWorks. Hopefully future versions of boost will
+not require patching to compile correctly (there are a number of patches
+in the Boost TRAC site that have been filed, they just need to be integrated
+into the main branch). 
+
+http://sourceforge.net/project/showfiles.php?group_id=7586&package_id=8041&release_id=659602
+
+I unzipped the files into c:\Program Files\boost, and there should be a 
+directory boost_1_38_0 under that, which should have a boost directory
+under that, which should have a bunch of .hpp header files in it. 
+
+Patching Boost
+--------------
+
+Now, we need to patch the boost header files. This patch was tested with the 
+Boost 1.38 header files, and may not work correctly on newer versions of Boost
+(though hopefully we won't need to patch it anymore in the future). If you 
+haven't installed GNU patch yet (see above), this is a good time to do that. 
+
+So open up a command prompt (see above), and then type in the following
+command (if you installed the boost files to a different directory, then
+you will need to use that directory instead): 
+
+	cd "\Program Files\boost\boost_1_38_0"
+
+Now, do a dry run of the patch (the patch is located in the boost directory of
+the WebDMA distribution). Type the following:
+
+	patch --dry-run -p1 < path\to\patchfile\boost_1_38_vxworks.patch
+	
+And if it works, you should see the following output:
+
+	patching file boost/asio/detail/descriptor_ops.hpp
+	patching file boost/asio/detail/pipe_select_interrupter.hpp
+	patching file boost/asio/detail/select_interrupter.hpp
+	patching file boost/asio/detail/socket_ops.hpp
+	patching file boost/asio/detail/socket_types.hpp
+	patching file boost/asio/serial_port_base.hpp
+	patching file boost/asio/serial_port_service.hpp
+	patching file boost/config/platform/vxworks.hpp
+	patching file boost/config/select_platform_config.hpp
+	patching file boost/date_time/c_time.hpp
+	patching file boost/date_time/compiler_config.hpp
+	patching file boost/date_time/microsec_time_clock.hpp
+	patching file boost/functional/hash/detail/float_functions.hpp
+	patching file boost/thread/pthread/recursive_mutex.hpp
+
+If you do not see that output, then you did something wrong. If you didn't
+do it wrong, go ahead and actually do it:
+
+	patch -p1 < path\to\patchfile\boost_1_38_vxworks.patch
+
+And you should see the same output. 
+
+Doing the actual build
+----------------------
+
+Launch the Wind River Environment, and open the workspace that your
+project resides in (this should be done by default). 
+
+Right click on the Project Explorer, and select "Import Project". Select
+General -> Existing Projects into Workspace, and select the WebDMA src/
+directory as the "root directory" of the project. 
+
+Next, copy the files in include/WebDMA to the following directory: 
+	
+	C:\windriver\vxworks-6.3\target\h\WebDMA
+	
+After that, you should just be able to build and it should just work. 
+
+
+Installing onto the robot
+-------------------------
+
+FTP to your robot, and copy the resulting WebDMA.out file to /ni-rt/system
+
+Grab /ni-rt.ini from your robot, and add "WebDMA.out" to the line in the file
+that says X. Reboot the cRio, and it should be loaded automatically when your
+robot starts again. 
+
+Installing WebDMA header files
+------------------------------
+
+You should copy the following files from include/WebDMA to 
+C:\WindRiver\vxworks-6.3\target\h\WebDMA:
+
+	- WebDMA.h
+	- VariableProxy.h
+	- VariableProxyFlags.h
+
+
+Loading the web interface files onto the robot
+----------------------------------------------
+
+The files in the www directory of the WebDMA distribution need to be copied
+to your robot and placed in a directory called 'www', unless you change it in
+the code. 
+
+Just FTP to your robot's IP address and make sure you use FRC as the username 
+and password. Copy all of the files in the directory over. 
+
+I recommend FileZilla for an FTP client. You can get it at 
+http://filezilla-project.org/download.php?type=client
+
+	- Open FileZilla
+	- at the top of the screen, enter "10.xx.yy.2" (where xx.yy is your
+	team number -- this is the IP address of your robot), and then
+	enter FRC as user name and FRC as password. Click 'Quickconnect'
+	- Drag the www directory into the remote site window once it connects
+
+
+Testing
+-------
+
+Once you have HTML interface files are on the robot, and you have a project 
+that compiles and enables WebDMA (see README.FRC), then go ahead and load your 
+code onto the robot. Once its loaded and started then point Firefox 
+(recommended, but other browsers will work, just not tested very much at all) 
+at your robot's IP address and see if the page loads. If it loads, then 
+celebrate!
+
+If its not working, send me an email or file a bug, because it should work. 
+
+You can look at the main.cpp file (included with WebDMA) for an example of
+how to use the proxy objects and how to set them up. However, keep in mind 
+that the proxy objects should mostly act like normal integer/boolean/float 
+variables (just remember that their values can change anytime). You can look
+at WebDMA/WebDMA.h and WebDMA/VariableProxy.h for documentation.
+VariableProxyImpl is the actual implementation for the proxy classes. 
+
+
+
+Bugs/Improvements
+-----------------
+
+Let me know if you find any problems. Patches are welcome!
+
+Dustin Spicuzza
+dustin@virtualroadside.com

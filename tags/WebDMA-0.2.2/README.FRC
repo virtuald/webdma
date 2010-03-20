@@ -1,0 +1,45 @@
+After using the WebDMA installer to install WebDMA on your computer,
+you can open the WebDMA sample project by following these steps:
+
+	- Open Wind River
+	
+	- Select from the menu "File -> New -> Example"
+	- Select "VxWorks Downloadable Kernel Module Sample Project"
+	- Select "WebDMA FRC Simple Robot Demo", click Finish
+	- Restart Wind River, and build the project
+	- Load onto your robot, and enjoy!
+	
+To view the web interface, start the program and view http://10.xx.yy.2/ 
+where xx and yy are the first two and last two digits of your team number 
+(ie, team 2423 uses 10.24.23.2 ) 
+
+Note: You must use the "WebDMA FRC Robot Upload" tool to upload the
+WebDMA object files to your robot, otherwise these instructions won't
+work. 
+
+You can also follow the following instructions:
+
+Using WebDMA from your robot project
+------------------------------
+
+After you get WebDMA installed (either manually or by using the automated
+installer), then add the following include directive to the top of the file.
+	
+	#include <WebDMA/WebDMA.h>
+
+Add the following variable to your class:
+
+	WebDMA webdma;
+	
+And then add the following line to the constructor of RobotMain (or whatever):
+
+	IntProxy i1 = webdma.CreateIntProxy("Integers", "i1", 
+           IntProxyFlags().default_value(5).minval(0).maxval(10).step(1) );
+					
+	webdma.Enable();
+	
+And thats it (we're not going to use it or anything. If you were going to use
+it, then you would need to store the IntProxy object somewhere where it can be
+accessed). See the sample project that was installed for a more complete
+example program. 
+
