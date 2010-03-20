@@ -26,6 +26,7 @@
 
 
 #Include <FTPEx.au3>
+#Include <String.au3>
 
 ; various paths / settings
 $tempFile = @TempDir & "\ni-rt.ini"
@@ -135,8 +136,16 @@ If StringInStr( $dlls, $object_name & ";" ) = 0 Then
 	If StringRight( $dlls, 1 ) <> ";" Then
 		$dlls = $dlls & ";"
 	EndIf
+
+	; make sure this loads before FRC_UserProgram.out
+	$user_pos = StringInStr( $dlls, "FRC_UserProgram.out" )
 	
-	$dlls = $dlls & $object_name & ";"
+	If $user_pos <> 0 Then
+		$dlls = _StringInsert( $dlls, $object_name & ";", $user_pos - 1 )
+	Else
+		$dlls = $dlls & $object_name & ";"
+	EndIf
+
 	IniWrite( $tempFile, "LVRT", "StartupDlls", $dlls)
 
 	ProgressSet(45, "Uploading new ni-rt.ini file" )

@@ -49,8 +49,8 @@ ProxiedPIDController::ProxiedPIDController(float Kp, float Ki, float Kd,
 	m_totalError = 0;
 	m_tolerance = .05F;
 
-	m_pidInput_value = webdma.CreateFloatProxy(groupname, "Input", FloatProxyFlags().default_value(0).readonly());
-	m_result = webdma.CreateFloatProxy(groupname, "Result", FloatProxyFlags().default_value(0).readonly());
+	m_pidInput_value = webdma.CreateFloatProxy(groupName, "Input", FloatProxyFlags().default_value(0).readonly());
+	m_result = webdma.CreateFloatProxy(groupName, "Result", FloatProxyFlags().default_value(0).readonly());
 	
 	m_pidInput = source;
 	m_pidOutput = output;
