@@ -15,7 +15,7 @@
 #include <string>
 #include <boost/noncopyable.hpp>
 
-#include "../WebDMA_Pimpl.h"
+class WebDMA_Pimpl;
 
 namespace http {
 namespace server {

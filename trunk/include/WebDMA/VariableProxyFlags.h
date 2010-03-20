@@ -122,6 +122,43 @@ typedef NumericProxyFlagsImpl<float>	FloatProxyFlags;
 typedef NumericProxyFlagsImpl<double>	DoubleProxyFlags;
 
 
+struct BoolProxyFlags {
+	
+	bool	default_value_;
+	bool	readonly_;
+
+	// various setters for the flags
+	BoolProxyFlags& default_value(bool value)
+	{
+		default_value_ = value;		
+		initialized_ = true;
+		return *this;
+	}
+	
+	BoolProxyFlags& readonly()
+	{
+		readonly_ = true;
+		return *this;
+	}
+	
+	bool is_initialized() const
+	{
+		return initialized_ || readonly_;
+	}
+
+	BoolProxyFlags() :
+		default_value_(false),
+		readonly_(false),
+		initialized_(false)
+	{}
+	
+private:
+
+	bool initialized_;
+	
+};
+
+
 #undef FN
 
 #endif

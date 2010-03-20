@@ -58,7 +58,7 @@ bool WebDMA::Disable()
 /*** proxy creation routines ***/
 
 
-IntProxy WebDMA::CreateIntProxy( 
+IntProxyInitializer WebDMA::CreateIntProxy( 
 	const char * groupName, 
 	const char * name, 
 	const IntProxyFlags &flags)
@@ -68,7 +68,7 @@ IntProxy WebDMA::CreateIntProxy(
 	return proxy->GetProxy();
 }
 	
-FloatProxy WebDMA::CreateFloatProxy( 
+FloatProxyInitializer WebDMA::CreateFloatProxy( 
 	const char * groupName, 
 	const char * name, 
 	const FloatProxyFlags &flags)
@@ -78,7 +78,7 @@ FloatProxy WebDMA::CreateFloatProxy(
 	return proxy->GetProxy();
 }
 
-DoubleProxy WebDMA::CreateDoubleProxy( 
+DoubleProxyInitializer WebDMA::CreateDoubleProxy( 
 	const char * groupName, 
 	const char * name, 
 	const DoubleProxyFlags &flags)
@@ -89,12 +89,12 @@ DoubleProxy WebDMA::CreateDoubleProxy(
 }
 
 
-BoolProxy WebDMA::CreateBoolProxy( 
+BoolProxyInitializer WebDMA::CreateBoolProxy( 
 	const char * groupName, 
 	const char * name, 
-	bool default_value)
+	const BoolProxyFlags &flags )
 {
-	BoolProxyInfo * proxy = new BoolProxyInfo(default_value);
+	BoolProxyInfo * proxy = new BoolProxyInfo( flags );
 	m_pimpl->InitProxy( proxy, groupName, name );
 	return proxy->GetProxy();
 }
