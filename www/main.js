@@ -374,7 +374,11 @@ function start_ajax_loop()
 								obj.html(val);
 								break;
 							case 'input':
-								obj.checked = val;
+								if (val)
+									obj.attr('checked', 'checked');
+								else
+									obj.removeAttr('checked');
+								
 								break;
 						}
 					}

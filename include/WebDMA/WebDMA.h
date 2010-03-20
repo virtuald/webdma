@@ -99,7 +99,7 @@ public:
 		@param flags		Use this to set min/max/default values and etc. For example,
 							IntProxyFlags().default_value(x).minval(x).maxval(x).step(x)
 	*/
-	IntProxy CreateIntProxy( const char * groupName, const char * name, const IntProxyFlags &flags);
+	IntProxyInitializer CreateIntProxy( const char * groupName, const char * name, const IntProxyFlags &flags);
 	
 
 	/** 
@@ -110,7 +110,7 @@ public:
 		@param flags		Use this to set min/max/default values and etc. For example,
 							FloatProxyFlags().default_value(x).minval(x).maxval(x).step(x).precision(2)
 	*/
-	FloatProxy CreateFloatProxy( const char * groupName, const char * name, const FloatProxyFlags &flags);
+	FloatProxyInitializer CreateFloatProxy( const char * groupName, const char * name, const FloatProxyFlags &flags);
 	
 	/** 
 		Use this to initialize a 'double' floating point proxy
@@ -120,7 +120,7 @@ public:
 		@param flags		Use this to set min/max/default values and etc. For example,
 							DoubleProxyFlags().default_value(x).minval(x).maxval(x).step(x).precision(2)
 	*/
-	DoubleProxy CreateDoubleProxy( const char * groupName, const char * name, const DoubleProxyFlags &flags);
+	DoubleProxyInitializer CreateDoubleProxy( const char * groupName, const char * name, const DoubleProxyFlags &flags);
 	
 	
 	/**
@@ -130,7 +130,7 @@ public:
 		@param name				name of this variable (should be unique)
 		@param default_value 	the starting value of this proxy
 	*/
-	BoolProxy CreateBoolProxy( const char * groupName, const char * name, bool default_value);
+	BoolProxyInitializer CreateBoolProxy( const char * groupName, const char * name, const BoolProxyFlags &flags);
 	
 
 	/// @todo other types of variables: enums, doubles, signed/unsigned.. 

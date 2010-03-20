@@ -25,13 +25,14 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/thread/shared_mutex.hpp>
+#include <boost/utility.hpp>
 
 #include <WebDMA/VariableProxyFlags.h>
 #include <WebDMA/VariableProxy.h>
 
 
 // base type
-struct DataProxyInfo {
+struct DataProxyInfo : boost::noncopyable {
 
 	virtual bool SetValue( const std::string & ) = 0;
 	virtual std::string GetHtmlDisplay(std::size_t, std::size_t) const = 0;
@@ -187,33 +188,38 @@ private:
 };
 
 /// implementation for floats
-typedef NumericProxyInfoImpl<float, FloatProxy>		FloatProxyInfo;
+typedef NumericProxyInfoImpl<float, FloatProxyInitializer>		FloatProxyInfo;
 
 /// implementation for doubles
-typedef NumericProxyInfoImpl<double, DoubleProxy>	DoubleProxyInfo;
+typedef NumericProxyInfoImpl<double, DoubleProxyInitializer>	DoubleProxyInfo;
 
 /// implementation for integers
-typedef NumericProxyInfoImpl<int, IntProxy> 		IntProxyInfo;
+typedef NumericProxyInfoImpl<int, IntProxyInitializer> 			IntProxyInfo;
 
+#include <stdio.h>
 
 
 // boolean implementation
 struct BoolProxyInfo : public DataProxyInfo {
 
-	typedef BoolProxy					Proxy;
+	typedef BoolProxyInitializer		Proxy;
 
 	typedef Proxy::mutex_type			mutex_type;
 	typedef boost::shared_lock<mutex_type>	read_lock;
 	typedef boost::unique_lock<mutex_type> write_lock;
 
 	/// constructor
-	BoolProxyInfo(bool default_value) :
-		m_proxied_value(default_value)
+	BoolProxyInfo(const BoolProxyFlags &flags) :
+		m_proxied_value(flags.default_value_),
+		m_flags(flags)
 	{}
 
 	/// external thing sets value
 	bool SetValue( const std::string &value)
 	{
+		if (m_flags.readonly_)
+			return false;
+	
 		try {
 			write_lock lock(m_mutex);
 			m_proxied_value = boost::lexical_cast<bool>(value);
@@ -238,17 +244,33 @@ struct BoolProxyInfo : public DataProxyInfo {
 	
 		std::string html;
 		
-		html = "<input class=\"booleans\" type=\"checkbox\" id=\"g"
-				+ boost::lexical_cast<std::string>(gid)
-				+ "_v"
-				+ boost::lexical_cast<std::string>(vid)
-				+ (current_value ? "_checked" : "_notchecked")
-				+ "\"";
-				
-		if (current_value)
-			html.append(" checked");
-		
-		html.append(" />");
+		if (m_flags.readonly_)
+		{
+			html = "<span class=\"readonlyvar\" id=\"g" +
+					boost::lexical_cast<std::string>(gid) +
+					"_v" +
+					boost::lexical_cast<std::string>(vid) +
+					"\">";
+					
+			if (current_value)
+				html.append("True</span>");
+			else
+				html.append("False</span>");
+		}
+		else
+		{		
+			html = "<input class=\"booleans\" type=\"checkbox\" id=\"g"
+					+ boost::lexical_cast<std::string>(gid)
+					+ "_v"
+					+ boost::lexical_cast<std::string>(vid)
+					+ (current_value ? "_checked" : "_notchecked")
+					+ "\"";
+					
+			if (current_value)
+				html.append(" checked");
+			
+			html.append(" />");
+		}
 		
 		return html;
 	}
@@ -266,7 +288,10 @@ struct BoolProxyInfo : public DataProxyInfo {
 			+ boost::lexical_cast<std::string>(gid)
 			+ "_v"
 			+ boost::lexical_cast<std::string>(vid)
-			+ (current_value ? "\": true" : "\": false");
+			+ (current_value ? 
+				( m_flags.readonly_ ? "\": \"True\"" : "\": true") :
+				( m_flags.readonly_ ? "\": \"False\"" : "\": false")
+			 );
 	}
 	
 	Proxy GetProxy()
@@ -277,8 +302,9 @@ struct BoolProxyInfo : public DataProxyInfo {
 private:
 	BoolProxyInfo();
 
-	bool 				m_proxied_value;
+	bool				m_proxied_value;
 	mutable mutex_type 	m_mutex;
+	BoolProxyFlags		m_flags;
 };
 
 

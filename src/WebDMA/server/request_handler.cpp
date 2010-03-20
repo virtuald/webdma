@@ -20,6 +20,8 @@
 #include "reply.hpp"
 #include "request.hpp"
 
+#include "../WebDMA_Pimpl.h"
+
 
 namespace http {
 namespace server {

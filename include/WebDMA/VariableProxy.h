@@ -36,8 +36,11 @@ namespace boost {
 	- Assignment of the proxied type to the proxy (via operator=)
 	- Explicit setting of the proxied value (via Set())
 
+	Conversions:
+	- Assignment and copying between two proxy types
+	
 	Some notes:
-
+	
 	The proxy types allows you to use it in read-only operations exactly like
 	you would use the native type. The underlying data is in some 
 	configuration database or some such thing. Its like a smart pointer,
@@ -45,8 +48,17 @@ namespace boost {
 
 	The assumption is made that the proxy information will outlive the 
 	individual proxy instances, so this just holds raw pointers to the 
-	parent. This allows copying of the proxy type as much as you want, 
-	though I'm not quite sure why one would want to copy it all that much. 
+	parent.
+	
+	A proxy type must be initialized by a ProxyInitializer object. This
+	ensures that assignment of the raw pointer/mutex only occurs on
+	initialization, and allows copying and assignment to/from two proxy 
+	types. This allows the Proxy to duplicate the functionality of a
+	native type.
+	
+	If you want to copy a proxy to another proxy so that they share the same
+	base variable, you must explicitly assign to the other proxy using the 
+	clone() function. 
 	
 	@warning There are a number of caveats with this scheme: the primary one
 	is that since this is essentially a volatile instance, the proxied
@@ -54,6 +66,10 @@ namespace boost {
 	store the variable in a temporary if you are doing multiple operations
 	with the variable. Each access results in a lock operation, so accessing
 	this object can be expensive as well. 
+	
+	@warning Beware of copying the object to other proxy objects without
+	using the clone function! Generally, you should probably NOT use proxy
+	objects as function parameter types.
 	
 	@todo If we could use atomic operations, then we wouldn't need to do any
 	locking and this could be quite fast
@@ -63,16 +79,43 @@ namespace boost {
 
 #define IMPLEMENT_PROXY( implname, T ) 						\
 															\
+struct implname;											\
+															\
+struct implname##Initializer {								\
+															\
+	typedef boost::shared_mutex mutex_type;					\
+															\
+	implname##Initializer(T*, mutex_type *);				\
+															\
+private:													\
+															\
+	friend struct implname;									\
+															\
+	implname##Initializer();								\
+															\
+	T *					m_proxied_value;					\
+	mutex_type *		m_mutex;							\
+};															\
+															\
 struct implname {											\
 															\
 	typedef boost::shared_mutex mutex_type;					\
 															\
 	implname();												\
-	implname(T * proxied_value, mutex_type * mutex);		\
+	implname(const implname##Initializer &);				\
+	implname& operator=(const implname##Initializer &);		\
+															\
+	implname(const implname &);								\
+	implname& operator=(const implname&);					\
+															\
+	implname(const T&);										\
+	implname& operator=(const T&);							\
 	operator T() const;										\
+															\
 	T Get() const;											\
-	implname& operator=(const T& value);					\
-	void Set(const T& value);								\
+	void Set(const T&);										\
+															\
+	implname##Initializer Clone() const;					\
 															\
 private:													\
 	T * 					m_proxied_value;				\
