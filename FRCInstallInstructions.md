@@ -1,0 +1,1 @@
+It is now recommended that you use the FRC Robot Installer package to install WebDMA for FRC. If you want to build from source, there are instructions in the source release for WebDMA.
